@@ -3,9 +3,10 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var express = require('express');
+var mongoose = require('mongoose');
 var app = express();
 
-app.set('port', (process.env.PORT || 3000));
+app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 // view engine setup - If using a templating language
 app.set('views', __dirname + '/views');
@@ -18,6 +19,27 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+//mongoose
+mongoose.connect('mongodb://localhost/decision-task');
+
+var taskSchema = mongoose.Schema({
+    name: String,
+    answers: []
+});
+
+var Task = mongoose.model('Task', taskSchema);
+
+var task1 = new Task({
+    name: 'Decision Task 1',
+    answers: [ [0,1,2,3,4,5], [5,4,3,2,1] ]
+});
+task1.save(function (err) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('hi');
+  }
+});
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
 //   var err = new Error('Not Found');
