@@ -28,3 +28,6 @@ Run Instance:
 
 Open:
 `heroku open`
+
+View Logs:
+`heroku logs --tail`
