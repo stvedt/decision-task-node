@@ -14,3 +14,17 @@ Run:
 
 Run without NodeMon:
 `node server.js`
+
+
+## Heroku
+ancient-savannah-21367
+https://ancient-savannah-21367.herokuapp.com/ | https://git.heroku.com/ancient-savannah-21367.git
+
+Deploy:
+`git push heroku master`
+
+Run Instance:
+`heroku ps:scale web=1`
+
+Open:
+`heroku open`
