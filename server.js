@@ -5,9 +5,11 @@ var cookieParser = require('cookie-parser');
 var express = require('express');
 var app = express();
 
+app.set('port', (process.env.PORT || 3000));
+app.use(express.static(__dirname + '/public'));
 // view engine setup - If using a templating language
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -15,14 +17,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// app.use(function(req, res, next) {
+//   var err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
 
 // error handlers
 
@@ -49,27 +50,14 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
-module.exports = app;
-
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html', function(err){
-    if (err){
-      res.status(500).send(err);
-    }
-  })
+app.get('/', function(request, response) {
+  response.render('pages/index');
 });
 
-app.get('/choice-problem-1.html', function(req, res){
-  res.sendFile(__dirname + '/choice-problem-1.html', function(err){
-    if (err){
-      res.status(500).send(err);
-    }
-  })
+app.get('/choice-problem-1/', function(request, response) {
+  response.render('pages/choice-problem-1');
 });
 
-var port = 3000;
-
-app.listen(port, function(){
-  console.log('listening on http://localhost:',port);
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
