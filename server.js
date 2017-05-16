@@ -24,7 +24,7 @@ app.use(cookieParser());
 //mongoose
 // mongoose.connect('mongodb://localhost/decision-task');
 //remote
-mongoose.connect('mongodb://heroku_qcfr409t:aqqntmnof9th01dudo6qpvli1d@ds143131.mlab.com:43131/heroku_qcfr409t');
+mongoose.connect(process.env.MONGODB_URI);
 
 var taskSchema = mongoose.Schema({
     name: String,
