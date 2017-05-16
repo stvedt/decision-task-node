@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var express = require('express');
 var mongoose = require('mongoose');
 var app = express();
+var HerokuDB = require('./keys/mlab');
+console.log(HerokuDB);
 
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
@@ -22,27 +24,27 @@ app.use(cookieParser());
 //mongoose
 // mongoose.connect('mongodb://localhost/decision-task');
 //remote
-//mongoose.connect('mongodb://<dbuser>:<dbpassword>@ds143131.mlab.com:43131/heroku_qcfr409t');
+mongoose.connect('mongodb://heroku_qcfr409t:aqqntmnof9th01dudo6qpvli1d@ds143131.mlab.com:43131/heroku_qcfr409t');
 
-// var taskSchema = mongoose.Schema({
-//     name: String,
-//     answers: []
-// });
-//
-// var Task = mongoose.model('Task', taskSchema);
-//
-// var task1 = new Task({
-//     name: 'Decision Task 2',
-//     answers: [ [0,1,2,3,4,5], [5,4,3,2,1] ]
-// });
-//
-// task1.save(function (err) {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     console.log('save successful');
-//   }
-// });
+var taskSchema = mongoose.Schema({
+    name: String,
+    answers: []
+});
+
+var Task = mongoose.model('Task', taskSchema);
+
+var task1 = new Task({
+    name: 'Decision Task 2',
+    answers: [ [0,1,2,3,4,5], [5,4,3,2,1] ]
+});
+
+task1.save(function (err) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('save successful');
+  }
+});
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
 //   var err = new Error('Not Found');
