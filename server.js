@@ -37,7 +37,7 @@ task1.save(function (err) {
   if (err) {
     console.log(err);
   } else {
-    console.log('hi');
+    console.log('save successful');
   }
 });
 // catch 404 and forward to error handler
