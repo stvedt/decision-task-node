@@ -5,8 +5,8 @@ var cookieParser = require('cookie-parser');
 var express = require('express');
 var mongoose = require('mongoose');
 var app = express();
-var HerokuDB = require('./keys/mlab');
-console.log(HerokuDB);
+// var HerokuDB = require('./keys/mlab');
+// console.log(HerokuDB);
 
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
