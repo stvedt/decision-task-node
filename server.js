@@ -24,7 +24,7 @@ app.use(cookieParser());
 //mongoose
 // mongoose.connect('mongodb://localhost/decision-task');
 //remote
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI || "MONGODB_URI='mongodb://localhost/decision-task");
 
 var taskSchema = mongoose.Schema({
     name: String,
@@ -35,8 +35,11 @@ var Task = mongoose.model('Task', taskSchema);
 
 var task1 = new Task({
     name: 'Decision Task 2',
-    answers: [ [0,1,2,3,4,5], [5,4,3,2,1] ]
+    answers: [ [1,2,3,4,5], [5,4,3,2,1] ]
 });
+
+//write to database user by id: subjecta
+//send results of respective choice problem
 
 task1.save(function (err) {
   if (err) {

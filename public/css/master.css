@@ -34,10 +34,23 @@ main {
   width: 40%;
 }
 
+.option-box.active { border: 2px solid black; }
+
 .option-box.final-decision {
   margin-top: 50px;
   display: block;
   margin: 50px auto 10px auto;
+}
+.option-box.final-decision .animate {
+  background-color: #f3c04d;
+  animation: colorchange 1s;
+}
+
+@keyframes colorchange
+{
+  0%   {background: white;}
+  50%  {background: red;}
+  100%  {background: white;}
 }
 
 @media (min-width: 1200px) {
