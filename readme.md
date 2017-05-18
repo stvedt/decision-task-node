@@ -1,24 +1,28 @@
 Decision Task Set Up
 ====================
 
-This Project uses NodeJS and Heroku to Deploy
+This Project uses NodeJS, Express, Mongoose and Heroku
 
 To run locally you must have the following installed:
 - NodeJS
 - NodeMon (optional)
 - NPM
 
-Run:
+Local Run:
+
 `npm install`
+
 `nodemon server.js`
 
 Run without NodeMon:
 `node server.js`
 
+Local Run with Heroku
+`heroku local web`
 
 ## Heroku
 ancient-savannah-21367
-https://ancient-savannah-21367.herokuapp.com/ | https://git.heroku.com/ancient-savannah-21367.git
+https://empirical-project.herokuapp.com/ | https://git.heroku.com/empirical-project.git
 
 Deploy:
 `git push heroku master`
