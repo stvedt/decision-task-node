@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="description" content="Decision Task">
+    <meta charset="utf-8">
+    <title>Decision-making Game - Results</title>
+    <link rel="stylesheet" href="/css/results.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Sessions</h1>
+      <% sessions.forEach(function(session){%>
+        <div class="session">
+          <h4>Session ID: <%= session._id %></h4>
+          <h5>Samples</h5>
+          <% for (var key in session.results) {%>
+            <%= key %>
+            <ol>
+              <% session.results[key].samples.forEach(function(sample){%>
+                <li>
+                  Option: <b><%= sample.option %></b> |
+                  Value: <b><%= sample.value %></b>
+                </li>
+              <% }); %>
+            </ol>
+          <% } %>
+
+        </div>
+
+      <% }); %>
+
+    </main>
+
+  </body>
+</html>
