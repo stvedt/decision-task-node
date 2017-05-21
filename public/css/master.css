@@ -15,6 +15,7 @@ main {
   margin: 50px auto 0 auto;
   padding: 5px 5px 20px 5px;
   text-align: center;
+  position: relative;
 }
 
 .button {
@@ -28,6 +29,14 @@ main {
   border-radius: 30px;
 }
 
+.total-amount-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: 1px solid #000;
+  display: block;
+  padding: 5px;
+}
 .option-box {
   display: inline-block;
   border: 1px solid black;

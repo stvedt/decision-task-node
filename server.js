@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var express = require('express');
 var mongoose = require('mongoose');
+var timestamps = require('mongoose-timestamp');
 var app = express();
 // var HerokuDB = require('./keys/mlab');
 // console.log(HerokuDB);
@@ -25,6 +26,35 @@ app.use(cookieParser());
 // mongoose.connect('mongodb://localhost/decision-task');
 //remote
 mongoose.connect(process.env.MONGODB_URI || "MONGODB_URI='mongodb://localhost/decision-task");
+
+var sessionSchema = mongoose.Schema({
+  results: {
+    type: Object,
+      choice_problem_1: {
+        samples : [
+          {
+            option: String,
+            value: Number
+          }
+        ],
+        final_decision: Number
+      }
+  }
+});
+// var sessionSchema = mongoose.Schema({
+//   results: String
+// });
+sessionSchema.plugin(timestamps);
+var Session = mongoose.model('Session', sessionSchema);
+var baseSession = {
+  results: {
+      choice_problem_1: {
+        samples : []
+      }
+  }
+};
+var newSession = new Session(baseSession);
+//Task
 
 var taskSchema = mongoose.Schema({
     name: String,
@@ -80,12 +110,74 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.get('/', function(request, response) {
-  response.render('pages/index');
+app.get('/', function(req, res) {
+  res.render('pages/index');
 });
 
-app.get('/choice-problem-1/', function(request, response) {
-  response.render('pages/choice-problem-1');
+app.get('/results/', function(req, res) {
+
+  Session.find({}, function(err, sessions){
+    // res.send(sessions);
+    res.render('pages/results', { 'sessions' : sessions });
+  });
+
+});
+
+app.get('/choice-problem-1/', function(req, res) {
+  res.render('pages/choice-problem-1');
+});
+
+app.use('/create-session/', function(req, res){
+
+  console.log('create new session');
+
+  newSession.save(function (err, savedSession) {
+    console.log('save started');
+    if (err) {
+      console.log(err);
+    } else {
+
+      console.log('Session created successfully with id: ', newSession._id);
+      res.json(savedSession)
+    }
+  });
+
+  // res.json({id: newSession._id });
+});
+
+app.put('/send-option/', function(req, res){
+  // console.log("req: ", req);
+  req.params.problemNumber;
+
+  Session.findOne({ _id: req.query.id }, function (err, doc){
+
+    doc.results.choice_problem_1.samples.push({
+        option: req.query.option,
+        value: req.query.value
+      });
+
+      doc.markModified('results.choice_problem_1.samples');
+      doc.save(function (err, updatedSample) {
+        if (err) return handleError(err);
+        res.send(updatedSample);
+      });
+  });
+});
+
+app.put('/send-final-decision/', function(req, res){
+  // console.log("req: ", req);
+  req.params.problemNumber;
+
+  Session.findOne({ _id: req.query.id }, function (err, doc){
+
+    doc.results.choice_problem_1.final_decision = req.query.value ;
+
+      doc.markModified('results.choice_problem_1.final_decision');
+      doc.save(function (err, updatedSample) {
+        if (err) return handleError(err);
+        res.send(updatedSample);
+      });
+  });
 });
 
 app.listen(app.get('port'), function() {

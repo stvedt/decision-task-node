@@ -9,6 +9,7 @@
       problemNumber: 2
     },
   }
+  var sessionId;
 
   function randomWithProbability() {
     var optionBvalues = [0,0,0,0,0,0,1,1,1,1];
@@ -18,6 +19,26 @@
 
   //Set up localstorage session
   //create session if one does not exist
+  if ( localStorage.getItem('sessionId') === null ) {
+    fetch("/create-session/", {
+      method: "GET"
+    }).then(function(response){
+      console.log('successful sessions');
+      return response.json();
+    }).then(function(data) {
+      //  console.log(data);
+       localStorage.setItem('sessionId',data._id);
+       sessionId = data._id;
+       console.log('localStorage sessionId set')
+    })
+    .catch(err => {
+        //do something smarter here
+
+        throw err;
+    });
+  } else {
+    sessionId = localStorage.getItem('sessionId');
+  }
 
   var config = pages.choiceProblem1,
       currentDecision = null,
@@ -48,6 +69,43 @@
 
   }
 
+  function sendSampleValue(option, value){
+    var postURL =  '/send-option/?id=' + sessionId +
+                            '&option=' + option +
+                             '&value=' + value;
+    fetch(postURL, {
+      method: "PUT"
+    }).then(function(response){
+      console.log('successful sessions');
+      return response.json();
+    }).then(function(data) {
+       console.log("Post option",data);
+    })
+    .catch(err => {
+        //do something smarter here
+
+        throw err;
+    });
+  }
+
+  function sendFinalDecisionValue(value){
+    var postURL =  '/send-final-decision/?id=' + sessionId +
+                                     '&value=' + value;
+    fetch(postURL, {
+      method: "PUT"
+    }).then(function(response){
+      console.log('successful sessions');
+      return response.json();
+    }).then(function(data) {
+       console.log("Post option",data);
+    })
+    .catch(err => {
+        //do something smarter here
+
+        throw err;
+    });
+  }
+
   function bindEvents(){
 
     $optionA.addEventListener('click', function(){
@@ -59,6 +117,9 @@
 
       $finalDecision.innerHTML = config.option_a_value;
       currentDecision = config.option_a_value;
+
+      sendSampleValue('a',config.option_a_value);
+
       //send to option a end point for choice problem x
     });
 
@@ -73,12 +134,14 @@
       $finalDecision.innerHTML = optionBValue;
       currentDecision = optionBValue;
       //send to option a end point for choice problem x
+      sendSampleValue('b',optionBValue)
     });
 
     $confirmDecision.addEventListener('click', function(){
       if( currentDecision !== null){
         console.log('Confirm Decision clicked');
         $finalDecision.innerHTML = currentDecision + '<br>Submitted';
+        sendFinalDecisionValue(currentDecision)
         //send to option a end point for choice problem x
       }
 
