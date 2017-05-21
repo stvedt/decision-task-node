@@ -114,6 +114,15 @@ app.get('/', function(req, res) {
   res.render('pages/index');
 });
 
+app.get('/results/', function(req, res) {
+
+  Session.find({}, function(err, sessions){
+    // res.send(sessions);
+    res.render('pages/results', { 'sessions' : sessions });
+  });
+
+});
+
 app.get('/choice-problem-1/', function(req, res) {
   res.render('pages/choice-problem-1');
 });
@@ -147,7 +156,23 @@ app.put('/send-option/', function(req, res){
         value: req.query.value
       });
 
-      doc.markModified('results');
+      doc.markModified('results.choice_problem_1.samples');
+      doc.save(function (err, updatedSample) {
+        if (err) return handleError(err);
+        res.send(updatedSample);
+      });
+  });
+});
+
+app.put('/send-final-decision/', function(req, res){
+  // console.log("req: ", req);
+  req.params.problemNumber;
+
+  Session.findOne({ _id: req.query.id }, function (err, doc){
+
+    doc.results.choice_problem_1.final_decision = req.query.value ;
+
+      doc.markModified('results.choice_problem_1.final_decision');
       doc.save(function (err, updatedSample) {
         if (err) return handleError(err);
         res.send(updatedSample);

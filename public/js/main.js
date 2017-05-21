@@ -69,10 +69,28 @@
 
   }
 
-  function sendValue(option, value){
+  function sendSampleValue(option, value){
     var postURL =  '/send-option/?id=' + sessionId +
                             '&option=' + option +
                              '&value=' + value;
+    fetch(postURL, {
+      method: "PUT"
+    }).then(function(response){
+      console.log('successful sessions');
+      return response.json();
+    }).then(function(data) {
+       console.log("Post option",data);
+    })
+    .catch(err => {
+        //do something smarter here
+
+        throw err;
+    });
+  }
+
+  function sendFinalDecisionValue(value){
+    var postURL =  '/send-final-decision/?id=' + sessionId +
+                                     '&value=' + value;
     fetch(postURL, {
       method: "PUT"
     }).then(function(response){
@@ -100,7 +118,7 @@
       $finalDecision.innerHTML = config.option_a_value;
       currentDecision = config.option_a_value;
 
-      sendValue('a',config.option_a_value);
+      sendSampleValue('a',config.option_a_value);
 
       //send to option a end point for choice problem x
     });
@@ -116,13 +134,14 @@
       $finalDecision.innerHTML = optionBValue;
       currentDecision = optionBValue;
       //send to option a end point for choice problem x
-      sendValue('b',optionBValue)
+      sendSampleValue('b',optionBValue)
     });
 
     $confirmDecision.addEventListener('click', function(){
       if( currentDecision !== null){
         console.log('Confirm Decision clicked');
         $finalDecision.innerHTML = currentDecision + '<br>Submitted';
+        sendFinalDecisionValue(currentDecision)
         //send to option a end point for choice problem x
       }
 
