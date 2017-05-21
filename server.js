@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var express = require('express');
 var mongoose = require('mongoose');
+var timestamps = require('mongoose-timestamp');
 var app = express();
 // var HerokuDB = require('./keys/mlab');
 // console.log(HerokuDB);
@@ -28,7 +29,7 @@ mongoose.connect(process.env.MONGODB_URI || "MONGODB_URI='mongodb://localhost/de
 
 var sessionSchema = mongoose.Schema({
   results: {
-      type: Object,
+    type: Object,
       choice_problem_1: {
         samples : [
           {
@@ -43,6 +44,7 @@ var sessionSchema = mongoose.Schema({
 // var sessionSchema = mongoose.Schema({
 //   results: String
 // });
+sessionSchema.plugin(timestamps);
 var Session = mongoose.model('Session', sessionSchema);
 var baseSession = {
   results: {
@@ -134,28 +136,23 @@ app.use('/create-session/', function(req, res){
   // res.json({id: newSession._id });
 });
 
-app.use('/send-option/:problemNumber', function(req, res){
+app.put('/send-option/', function(req, res){
+  // console.log("req: ", req);
   req.params.problemNumber;
-  console.log(req.params.problemNumber);
-  var obj = {"problem":req.params.problemNumber};
 
-  var obj = {"problem":req.params.problemNumber};
-  var id = '59210177326f0d96aa174fea';
-  Session.findById(id, function (err, session) {
-    if (err) return handleError(err);
-    console.log(session.results.choice_problem_1.samples);
-    var newSample = {
-      option: 'a',
-      value: 0.25
-    }
-    newSession.results.choice_problem_1.samples.push(newSample);
-    newSession.save(function (err, updatedSample) {
-      if (err) return handleError(err);
-      res.send(updatedSample);
-    });
+  Session.findOne({ _id: req.query.id }, function (err, doc){
+
+    doc.results.choice_problem_1.samples.push({
+        option: req.query.option,
+        value: req.query.value
+      });
+
+      doc.markModified('results');
+      doc.save(function (err, updatedSample) {
+        if (err) return handleError(err);
+        res.send(updatedSample);
+      });
   });
-
-  // res.json(obj);
 });
 
 app.listen(app.get('port'), function() {
