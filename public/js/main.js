@@ -18,6 +18,30 @@
 
   //Set up localstorage session
   //create session if one does not exist
+  if (localStorage.getItem("infiniteScrollEnabled") === null && localStorage.getItem('sessionId') === null ) {
+  	// Yippee! We can use localStorage awesomeness
+    fetch("/create-session/", {
+      method: "GET"
+    }).then(function(response){
+      console.log('successful sessions');
+      return response.json();
+    }).then(function(data) {
+       console.log(data);
+       localStorage.setItem('sessionId',data._id);
+       console.log('localStorage sessionId set')
+    })
+    .catch(err => {
+        //do something smarter here
+
+        throw err;
+    });
+
+    //(setItem, getItem, removeItem, key, length)
+  }
+  else {
+  	// Too bad, no localStorage for us
+    alert('Please update or use a newer version broswer.');
+  }
 
   var config = pages.choiceProblem1,
       currentDecision = null,

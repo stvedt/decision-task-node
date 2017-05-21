@@ -26,6 +26,34 @@ app.use(cookieParser());
 //remote
 mongoose.connect(process.env.MONGODB_URI || "MONGODB_URI='mongodb://localhost/decision-task");
 
+var sessionSchema = mongoose.Schema({
+  results: {
+      type: Object,
+      choice_problem_1: {
+        samples : [
+          {
+            option: String,
+            value: Number
+          }
+        ],
+        final_decision: Number
+      }
+  }
+});
+// var sessionSchema = mongoose.Schema({
+//   results: String
+// });
+var Session = mongoose.model('Session', sessionSchema);
+var baseSession = {
+  results: {
+      choice_problem_1: {
+        samples : []
+      }
+  }
+};
+var newSession = new Session(baseSession);
+//Task
+
 var taskSchema = mongoose.Schema({
     name: String,
     answers: []
@@ -80,12 +108,54 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.get('/', function(request, response) {
-  response.render('pages/index');
+app.get('/', function(req, res) {
+  res.render('pages/index');
 });
 
-app.get('/choice-problem-1/', function(request, response) {
-  response.render('pages/choice-problem-1');
+app.get('/choice-problem-1/', function(req, res) {
+  res.render('pages/choice-problem-1');
+});
+
+app.use('/create-session/', function(req, res){
+
+  console.log('create new session');
+
+  newSession.save(function (err, savedSession) {
+    console.log('save started');
+    if (err) {
+      console.log(err);
+    } else {
+
+      console.log('Session created successfully with id: ', newSession._id);
+      res.json(savedSession)
+    }
+  });
+
+  // res.json({id: newSession._id });
+});
+
+app.use('/send-option/:problemNumber', function(req, res){
+  req.params.problemNumber;
+  console.log(req.params.problemNumber);
+  var obj = {"problem":req.params.problemNumber};
+
+  var obj = {"problem":req.params.problemNumber};
+  var id = '59210177326f0d96aa174fea';
+  Session.findById(id, function (err, session) {
+    if (err) return handleError(err);
+    console.log(session.results.choice_problem_1.samples);
+    var newSample = {
+      option: 'a',
+      value: 0.25
+    }
+    newSession.results.choice_problem_1.samples.push(newSample);
+    newSession.save(function (err, updatedSample) {
+      if (err) return handleError(err);
+      res.send(updatedSample);
+    });
+  });
+
+  // res.json(obj);
 });
 
 app.listen(app.get('port'), function() {
