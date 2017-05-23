@@ -21,7 +21,7 @@ Local Run with Heroku
 `heroku local web`
 
 ## Heroku
-ancient-savannah-21367
+empirical-project
 https://empirical-project.herokuapp.com/ | https://git.heroku.com/empirical-project.git
 
 Deploy:
@@ -35,3 +35,9 @@ Open:
 
 View Logs:
 `heroku logs --tail`
+
+### Next Steps
+
+- Hook up total amount logic
+- Setup domain
+- modify to accept multiple choice problems
