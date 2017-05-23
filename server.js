@@ -124,7 +124,7 @@ app.get('/results/', function(req, res) {
 });
 
 app.get('/choice-problem-1/', function(req, res) {
-  res.render('pages/choice-problem-1');
+  res.render('pages/choice-problem');
 });
 
 app.use('/create-session/', function(req, res){
