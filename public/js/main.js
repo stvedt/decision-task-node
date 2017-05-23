@@ -1,21 +1,27 @@
 (function(){
   // "choice-problem-1" will be replaced with hashed page name
   var pages = {
-    "choiceProblem1": {
-      problemNumber: 1,
-      option_a_value: 0.25
+    "choice-problem-1": {
+      problem: "choice_problem_1",
+      option_a_value: 0.25,
+      option_b_value: function() {
+        var optionBvalues = [0,0,0,0,0,0,1,1,1,1];
+        var randomNumber = Math.floor(Math.random() * 10);
+        return optionBvalues[randomNumber];
+      }
     },
-    "choiceProblem2": {
-      problemNumber: 2
+    "choice-problem-2": {
+      problem: "choice_problem_2"
     },
   }
+
   var sessionId;
 
-  function randomWithProbability() {
-    var optionBvalues = [0,0,0,0,0,0,1,1,1,1];
-    var randomNumber = Math.floor(Math.random() * 10);
-    return optionBvalues[randomNumber];
-  }
+  // function randomWithProbability() {
+  //   var optionBvalues = [0,0,0,0,0,0,1,1,1,1];
+  //   var randomNumber = Math.floor(Math.random() * 10);
+  //   return optionBvalues[randomNumber];
+  // }
 
   //Set up localstorage session
   //create session if one does not exist
@@ -37,10 +43,11 @@
         throw err;
     });
   } else {
+    console.log('sessionId already exists:', localStorage.getItem('sessionId'));
     sessionId = localStorage.getItem('sessionId');
   }
 
-  var config = pages.choiceProblem1,
+  var config = getCurrentChoiceProblem(),
       currentDecision = null,
       animating = false;
   // all things DOM
@@ -48,6 +55,12 @@
       $optionB = document.getElementById('option-b'),
       $confirmDecision = document.getElementById('confirm-decision'),
       $finalDecision = document.getElementById('final-decision').getElementsByClassName('value')[0];
+  function getCurrentChoiceProblem(){
+    var path = window.location.pathname;
+    path = path.replace('/','')
+    console.log(path);
+    return pages[path];
+  }
 
   function animateSample(){
     $finalDecision.classList.add('animate');
@@ -76,12 +89,9 @@
     fetch(postURL, {
       method: "PUT"
     }).then(function(response){
-      console.log('successful sessions');
+      console.log('successful sample put');
       return response.json();
-    }).then(function(data) {
-       console.log("Post option",data);
-    })
-    .catch(err => {
+    }).catch(err => {
         //do something smarter here
 
         throw err;
@@ -94,7 +104,7 @@
     fetch(postURL, {
       method: "PUT"
     }).then(function(response){
-      console.log('successful sessions');
+      console.log('successful final decision submit');
       return response.json();
     }).then(function(data) {
        console.log("Post option",data);
@@ -130,14 +140,15 @@
       toggleOptionActiveClass('b');
       animateSample();
 
-      var optionBValue = randomWithProbability();
+      var optionBValue = config.option_b_value();
       $finalDecision.innerHTML = optionBValue;
       currentDecision = optionBValue;
       //send to option a end point for choice problem x
       sendSampleValue('b',optionBValue)
     });
 
-    $confirmDecision.addEventListener('click', function(){
+    $confirmDecision.addEventListener('click', function(e){
+      e.preventDefault();
       if( currentDecision !== null){
         console.log('Confirm Decision clicked');
         $finalDecision.innerHTML = currentDecision + '<br>Submitted';
