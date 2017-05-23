@@ -13,7 +13,7 @@
         <div class="session">
           <h4>Session ID: <%= session._id %> | Date: <%= session.updatedAt %></h4>
           <h5>Samples</h5>
-          <% for (var key in session.results) {%>
+          <% for (var key in session.results) {%> <!-- choice_problem_1, choice_problem_2, etc -->
             <%= key %>
             <ol>
               <% session.results[key].samples.forEach(function(sample){%>
@@ -23,6 +23,7 @@
                 </li>
               <% }); %>
             </ol>
+            <p><b>Final Decision: </b> <%= session.results[key].final_decision %></p>
           <% } %>
 
         </div>
