@@ -30,6 +30,7 @@ mongoose.connect(process.env.MONGODB_URI || "MONGODB_URI='mongodb://localhost/de
 var sessionSchema = mongoose.Schema({
   results: {
     type: Object,
+      total_amount: Number,
       choice_problem_1: {
         samples : [
           {
@@ -37,6 +38,7 @@ var sessionSchema = mongoose.Schema({
             value: Number
           }
         ],
+        completed: Boolean,
         final_decision: Number
       }
   }
@@ -49,8 +51,38 @@ var Session = mongoose.model('Session', sessionSchema);
 var baseSession = {
   results: {
       choice_problem_1: {
+        completed: false,
         samples : []
-      }
+      },
+      choice_problem_2: {
+        completed: false,
+        samples : []
+      },
+      choice_problem_3: {
+        completed: false,
+        samples : []
+      },
+      choice_problem_4: {
+        completed: false,
+        samples : []
+      },
+      choice_problem_5: {
+        completed: false,
+        samples : []
+      },
+      choice_problem_6: {
+        completed: false,
+        samples : []
+      },
+      choice_problem_7: {
+        completed: false,
+        samples : []
+      },
+      choice_problem_8: {
+        completed: false,
+        samples : []
+      },
+      total_amount: 9
   }
 };
 var newSession = new Session(baseSession);
@@ -70,14 +102,14 @@ var task1 = new Task({
 
 //write to database user by id: subjecta
 //send results of respective choice problem
-
-task1.save(function (err) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log('save successful');
-  }
-});
+//
+// task1.save(function (err) {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log('save successful');
+//   }
+// });
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
 //   var err = new Error('Not Found');
@@ -126,6 +158,35 @@ app.get('/results/', function(req, res) {
 app.get('/choice-problem-1/', function(req, res) {
   res.render('pages/choice-problem');
 });
+app.get('/choice-problem-2/', function(req, res) {
+  res.render('pages/choice-problem');
+});
+app.get('/choice-problem-3/', function(req, res) {
+  res.render('pages/choice-problem');
+});
+app.get('/choice-problem-4/', function(req, res) {
+  res.render('pages/choice-problem');
+});
+app.get('/choice-problem-5/', function(req, res) {
+  res.render('pages/choice-problem');
+});
+app.get('/choice-problem-6/', function(req, res) {
+  res.render('pages/choice-problem');
+});
+app.get('/choice-problem-7/', function(req, res) {
+  res.render('pages/choice-problem');
+});
+app.get('/choice-problem-8/', function(req, res) {
+  res.render('pages/choice-problem');
+});
+
+app.get('/get-total/', function(req, res){
+  console.log('get-total');
+  Session.findOne({ _id: req.query.id }, function (err, doc){
+    console.log(doc)
+    res.json(doc.results.total_amount);
+  });
+});
 
 app.use('/create-session/', function(req, res){
 
@@ -151,12 +212,12 @@ app.put('/send-option/', function(req, res){
 
   Session.findOne({ _id: req.query.id }, function (err, doc){
 
-    doc.results.choice_problem_1.samples.push({
+    doc.results[req.query.problem].samples.push({
         option: req.query.option,
         value: req.query.value
       });
 
-      doc.markModified('results.choice_problem_1.samples');
+      doc.markModified('results.'+req.query.problem +'.samples');
       doc.save(function (err, updatedSample) {
         if (err) return handleError(err);
         res.send(updatedSample);
@@ -170,13 +231,24 @@ app.put('/send-final-decision/', function(req, res){
 
   Session.findOne({ _id: req.query.id }, function (err, doc){
 
-    doc.results.choice_problem_1.final_decision = req.query.value ;
+    if ( doc.results[req.query.problem].completed ) {
+      console.log('already marked as completed');
+      res.status(400);
+      res.send('already marked as completed');
+    } else {
+      doc.results[req.query.problem].final_decision = req.query.value ;
+      doc.results[req.query.problem].completed = true;
+      console.log('current total amount',doc.results.total_amount );
+      console.log('query value', req.query.value);
+      doc.results.total_amount = Number(doc.results.total_amount) + Number(req.query.value);
 
-      doc.markModified('results.choice_problem_1.final_decision');
+      doc.markModified('results.'+req.query.problem);
+      doc.markModified('results.total_amount');
       doc.save(function (err, updatedSample) {
         if (err) return handleError(err);
         res.send(updatedSample);
       });
+    }
   });
 });
 
