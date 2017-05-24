@@ -38,6 +38,10 @@ View Logs:
 
 ### Next Steps
 
-- Hook up total amount logic
-- Setup domain
-- modify to accept multiple choice problems
+- Randomize Order or Problem Set
+- Obfuscate to User actual Choice Problem Number
+- CSV or cleaner export
+
+### For later release
+
+- Questionnaire Support
