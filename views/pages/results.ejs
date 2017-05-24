@@ -8,20 +8,24 @@
   </head>
   <body>
     <main>
-      <h1>Sessions</h1>
+      <h1>Sessions <button type="button" name="button" id="new-session">Start New Session</button></h1>
       <% sessions.forEach(function(session){%>
         <div class="session">
           <h4>Session ID: <%= session._id %> | Date: <%= session.updatedAt %></h4>
           <h5>Samples</h5>
-          <% for (var key in session.results) {%> <!-- choice_problem_1, choice_problem_2, etc -->
+          <%= session._id %>
+          <% for (var key in session.results) {%>
             <%= key %>
             <ol>
-              <% session.results[key].samples.forEach(function(sample){%>
-                <li>
-                  Option: <b><%= sample.option %></b> |
-                  Value: <b><%= sample.value %></b>
-                </li>
-              <% }); %>
+              <% if (session.results[key].samples !== undefined) { %>
+                <% session.results[key].samples.forEach(function(sample){%>
+                  <li>
+                    Option: <b><%= sample.option %></b> |
+                    Value: <b><%= sample.value %></b>
+                  </li>
+                <% }); %>
+              <% } %>
+
             </ol>
             <p><b>Final Decision: </b> <%= session.results[key].final_decision %></p>
           <% } %>
@@ -31,6 +35,8 @@
       <% }); %>
 
     </main>
+
+    <script type="text/javascript" src="/js/admin.js"></script>
 
   </body>
 </html>

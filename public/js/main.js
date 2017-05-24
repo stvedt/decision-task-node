@@ -11,9 +11,69 @@
       }
     },
     "choice-problem-2": {
-      problem: "choice_problem_2"
+      problem: "choice_problem_2",
+      option_a_value: 0.15,
+      option_b_value: function() {
+        var optionBvalues = [0,0,0,0,0.5,0.5,0.5,0.5,0.5,0.5];
+        var randomNumber = Math.floor(Math.random() * 10);
+        return optionBvalues[randomNumber];
+      }
     },
-  }
+    "choice-problem-3": {
+      problem: "choice_problem_3",
+      option_a_value: 0.2,
+      option_b_value: function() {
+        var optionBvalues = [0,0,0,0,0,0,0,0,1.5,1.5];
+        var randomNumber = Math.floor(Math.random() * 10);
+        return optionBvalues[randomNumber];
+      }
+    },
+    "choice-problem-4": {
+      problem: "choice_problem_4",
+      option_a_value: 0.1,
+      option_b_value: function() {
+        var optionBvalues = [0,0,0,0,0,0,0,0,0,2];
+        var randomNumber = Math.floor(Math.random() * 10);
+        return optionBvalues[randomNumber];
+      }
+    },
+    "choice-problem-5": {
+      problem: "choice_problem_5",
+      option_a_value: -0.25,
+      option_b_value: function() {
+        var optionBvalues = [0,0,0,0,0,0,-1,-1,-1,-1];
+        var randomNumber = Math.floor(Math.random() * 10);
+        return optionBvalues[randomNumber];
+      }
+    },
+    "choice-problem-6": {
+      problem: "choice_problem_6",
+      option_a_value: -0.15,
+      option_b_value: function() {
+        var optionBvalues = [0,0,0,0,0,0,-1,-1,-1,-1];
+        var randomNumber = Math.floor(Math.random() * 10);
+        return optionBvalues[randomNumber];
+      }
+    },
+    "choice-problem-7": {
+      problem: "choice_problem_7",
+      option_a_value: -0.2,
+      option_b_value: function() {
+        var optionBvalues = [0,0,0,0,0,0,0,0,-1.5,-1.5];
+        var randomNumber = Math.floor(Math.random() * 10);
+        return optionBvalues[randomNumber];
+      }
+    },
+    "choice-problem-8": {
+      problem: "choice_problem_8",
+      option_a_value: -0.1,
+      option_b_value: function() {
+        var optionBvalues = [0,0,0,0,0,0,0,0,0,-2];
+        var randomNumber = Math.floor(Math.random() * 10);
+        return optionBvalues[randomNumber];
+      }
+    },
+  };
 
   var sessionId;
 
@@ -45,6 +105,23 @@
   } else {
     console.log('sessionId already exists:', localStorage.getItem('sessionId'));
     sessionId = localStorage.getItem('sessionId');
+
+    fetch("/get-total/?id="+sessionId, {
+      method: "GET"
+    }).then(function(response){
+      console.log('successful get total');
+      return response.json();
+    }).then(function(data) {
+      //  console.log(data);
+      $totalAmount.innerHTML = data;
+       console.log('total amount set')
+    })
+    .catch(err => {
+        //do something smarter here
+
+        throw err;
+    });
+
   }
 
   var config = getCurrentChoiceProblem(),
@@ -53,8 +130,10 @@
   // all things DOM
   var $optionA = document.getElementById('option-a'),
       $optionB = document.getElementById('option-b'),
+      $totalAmount = document.getElementById('total-amount'),
       $confirmDecision = document.getElementById('confirm-decision'),
       $finalDecision = document.getElementById('final-decision').getElementsByClassName('value')[0];
+
   function getCurrentChoiceProblem(){
     var path = window.location.pathname;
     path = path.replace('/','')
@@ -84,6 +163,7 @@
 
   function sendSampleValue(option, value){
     var postURL =  '/send-option/?id=' + sessionId +
+                           '&problem=' + config.problem +
                             '&option=' + option +
                              '&value=' + value;
     fetch(postURL, {
@@ -100,6 +180,7 @@
 
   function sendFinalDecisionValue(value){
     var postURL =  '/send-final-decision/?id=' + sessionId +
+                                   '&problem=' + config.problem +
                                      '&value=' + value;
     fetch(postURL, {
       method: "PUT"
@@ -107,7 +188,10 @@
       console.log('successful final decision submit');
       return response.json();
     }).then(function(data) {
-       console.log("Post option",data);
+       console.log("Set button state");
+       console.log(data);
+       $totalAmount.innerHTML = data.results.total_amount;
+       $confirmDecision.classList.add('disabled');
     })
     .catch(err => {
         //do something smarter here
@@ -151,7 +235,6 @@
       e.preventDefault();
       if( currentDecision !== null){
         console.log('Confirm Decision clicked');
-        $finalDecision.innerHTML = currentDecision + '<br>Submitted';
         sendFinalDecisionValue(currentDecision)
         //send to option a end point for choice problem x
       }
