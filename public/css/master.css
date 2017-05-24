@@ -29,6 +29,11 @@ main {
   border-radius: 30px;
 }
 
+.button.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
 .total-amount-container {
   position: absolute;
   left: 0;
