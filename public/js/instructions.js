@@ -1,79 +1,23 @@
 (function(){
   // Randomizing order of pages
-  var pages = {
-    "choice-problem-1": {
-      problem: "choice_problem_1",
-      option_a_value: 0.25,
-      option_b_value: function() {
-        var optionBvalues = [0,0,0,0,0,0,1,1,1,1];
-        var randomNumber = Math.floor(Math.random() * 10);
-        return optionBvalues[randomNumber];
-      }
-    },
-    "choice-problem-2": {
-      problem: "choice_problem_2",
-      option_a_value: 0.15,
-      option_b_value: function() {
-        var optionBvalues = [0,0,0,0,0.5,0.5,0.5,0.5,0.5,0.5];
-        var randomNumber = Math.floor(Math.random() * 10);
-        return optionBvalues[randomNumber];
-      }
-    },
-    "choice-problem-3": {
-      problem: "choice_problem_3",
-      option_a_value: 0.2,
-      option_b_value: function() {
-        var optionBvalues = [0,0,0,0,0,0,0,0,1.5,1.5];
-        var randomNumber = Math.floor(Math.random() * 10);
-        return optionBvalues[randomNumber];
-      }
-    },
-    "choice-problem-4": {
-      problem: "choice_problem_4",
-      option_a_value: 0.1,
-      option_b_value: function() {
-        var optionBvalues = [0,0,0,0,0,0,0,0,0,2];
-        var randomNumber = Math.floor(Math.random() * 10);
-        return optionBvalues[randomNumber];
-      }
-    },
-    "choice-problem-5": {
-      problem: "choice_problem_5",
-      option_a_value: -0.25,
-      option_b_value: function() {
-        var optionBvalues = [0,0,0,0,0,0,-1,-1,-1,-1];
-        var randomNumber = Math.floor(Math.random() * 10);
-        return optionBvalues[randomNumber];
-      }
-    },
-    "choice-problem-6": {
-      problem: "choice_problem_6",
-      option_a_value: -0.15,
-      option_b_value: function() {
-        var optionBvalues = [0,0,0,0,0,0,-1,-1,-1,-1];
-        var randomNumber = Math.floor(Math.random() * 10);
-        return optionBvalues[randomNumber];
-      }
-    },
-    "choice-problem-7": {
-      problem: "choice_problem_7",
-      option_a_value: -0.2,
-      option_b_value: function() {
-        var optionBvalues = [0,0,0,0,0,0,0,0,-1.5,-1.5];
-        var randomNumber = Math.floor(Math.random() * 10);
-        return optionBvalues[randomNumber];
-      }
-    },
-    "choice-problem-8": {
-      problem: "choice_problem_8",
-      option_a_value: -0.1,
-      option_b_value: function() {
-        var optionBvalues = [0,0,0,0,0,0,0,0,0,-2];
-        var randomNumber = Math.floor(Math.random() * 10);
-        return optionBvalues[randomNumber];
-      }
-    },
-  };
+  function getPageJSONData(){
+    fetch("/js/pages.json", {
+      method: "GET"
+    }).then(function(response){
+      console.log('successful get JSON File');
+      return response.json();
+    }).then(function(data) {
+      pages = data;
+       console.log(data);
+       setupLocalStorage();
+    })
+    .catch(err => {
+        //do something smarter here
+
+        throw err;
+    });
+  }
+  getPageJSONData();
 
   function shuffleArray(array) {
       for (var i = array.length - 1; i > 0; i--) {
@@ -85,21 +29,24 @@
       return array;
   }
 
-  if ( localStorage.getItem('pageOrder') === null ) {
-    var arrayOfPageKeys = [];
-    for (key in pages){
-      arrayOfPageKeys.push(key);
-    }
-    console.log('first:',arrayOfPageKeys);
-    var newArrayOfPageKeys = shuffleArray(arrayOfPageKeys);
-    console.log('new:', newArrayOfPageKeys);
-    localStorage.setItem('pageOrder', JSON.stringify(newArrayOfPageKeys));
-    pageOrder =  newArrayOfPageKeys;
-  } else {
-    console.log('pageOrder is already set');
-    pageOrder = JSON.parse(localStorage.getItem('pageOrder'));
-  }
+  function setupLocalStorage(){
 
-  var $nextProblem = document.getElementById('next-problem');
-  $nextProblem.href = pageOrder[0];
+    if ( localStorage.getItem('pageOrder') === null ) {
+      var arrayOfPageKeys = [];
+      for (key in pages){
+        arrayOfPageKeys.push(key);
+      }
+      console.log('first:',arrayOfPageKeys);
+      var newArrayOfPageKeys = shuffleArray(arrayOfPageKeys);
+      console.log('new:', newArrayOfPageKeys);
+      localStorage.setItem('pageOrder', JSON.stringify(newArrayOfPageKeys));
+      pageOrder =  newArrayOfPageKeys;
+    } else {
+      console.log('pageOrder is already set');
+      pageOrder = JSON.parse(localStorage.getItem('pageOrder'));
+    }
+
+    var $nextProblem = document.getElementById('next-problem');
+    $nextProblem.href = pageOrder[0];
+  }
 })();
