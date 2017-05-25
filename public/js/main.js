@@ -75,17 +75,7 @@
     },
   };
 
-  var sessionId;
-
-  // function randomWithProbability() {
-  //   var optionBvalues = [0,0,0,0,0,0,1,1,1,1];
-  //   var randomNumber = Math.floor(Math.random() * 10);
-  //   return optionBvalues[randomNumber];
-  // }
-
-  //Set up localstorage session
-  //create session if one does not exist
-  if ( localStorage.getItem('sessionId') === null ) {
+  function createNewSession(){
     fetch("/create-session/", {
       method: "GET"
     }).then(function(response){
@@ -102,10 +92,9 @@
 
         throw err;
     });
-  } else {
-    console.log('sessionId already exists:', localStorage.getItem('sessionId'));
-    sessionId = localStorage.getItem('sessionId');
+  }
 
+  function getTotalAmount(){
     fetch("/get-total/?id="+sessionId, {
       method: "GET"
     }).then(function(response){
@@ -113,7 +102,7 @@
       return response.json();
     }).then(function(data) {
       //  console.log(data);
-      $totalAmount.innerHTML = data;
+      $totalAmount.innerHTML = data.toFixed(2);
        console.log('total amount set')
     })
     .catch(err => {
@@ -121,23 +110,79 @@
 
         throw err;
     });
+  }
 
+  function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = array[i];
+          array[i] = array[j];
+          array[j] = temp;
+      }
+      return array;
+  }
+
+  //Set up localstorage session
+  //create session if one does not exist
+  if ( localStorage.getItem('sessionId') === null ) {
+    createNewSession();
+  } else {
+    console.log('sessionId already exists:', localStorage.getItem('sessionId'));
+    sessionId = localStorage.getItem('sessionId');
+    getTotalAmount();
+  }
+
+  // Randomizing order of pages
+  if ( localStorage.getItem('pageOrder') === null ) {
+    var arrayOfPageKeys = [];
+    for (key in pages){
+      arrayOfPageKeys.push(key);
+    }
+    arrayOfPageKeys = shuffleArray(arrayOfPageKeys);
+    console.log(arrayOfPageKeys);
+    localStorage.setItem('pageOrder', arrayOfPageKeys);
+    pageOrder =  arrayOfPageKeys;
+  } else {
+    console.log('pageOrder is already set');
+    pageOrder = localStorage.getItem('pageOrder');
+    pageOrder = JSON.parse(pageOrder);
+    // console.log(pageOrder);
+  }
+
+  function updateNextProblem(failed){
+    if(!failed){
+        pageOrder.splice(0,1);
+    }
+    $nextProblem.href = pageOrder[0];
+    localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
+
+    if(pageOrder.length == 0){
+      $nextProblem.href = "/results/";
+      $nextProblem.innerHTML = "Completed: See Results";
+    }
+
+    $nextProblem.classList.remove('disabled');
+    $confirmDecision.classList.add('disabled');
   }
 
   var config = getCurrentChoiceProblem(),
       currentDecision = null,
-      animating = false;
+      animating = false,
+      sessionId,
+      pageOrder;
   // all things DOM
   var $optionA = document.getElementById('option-a'),
       $optionB = document.getElementById('option-b'),
       $totalAmount = document.getElementById('total-amount'),
       $confirmDecision = document.getElementById('confirm-decision'),
+      $nextProblem = document.getElementById('next-problem'),
       $finalDecision = document.getElementById('final-decision').getElementsByClassName('value')[0];
+
 
   function getCurrentChoiceProblem(){
     var path = window.location.pathname;
     path = path.replace('/','')
-    console.log(path);
+    console.log("path:",path);
     return pages[path];
   }
 
@@ -173,7 +218,6 @@
       return response.json();
     }).catch(err => {
         //do something smarter here
-
         throw err;
     });
   }
@@ -190,12 +234,13 @@
     }).then(function(data) {
        console.log("Set button state");
        console.log(data);
-       $totalAmount.innerHTML = data.results.total_amount;
+       $totalAmount.innerHTML = data.results.total_amount.toFixed(2);
        $confirmDecision.classList.add('disabled');
+       updateNextProblem();
     })
     .catch(err => {
         //do something smarter here
-
+        updateNextProblem(true);
         throw err;
     });
   }
@@ -213,8 +258,6 @@
       currentDecision = config.option_a_value;
 
       sendSampleValue('a',config.option_a_value);
-
-      //send to option a end point for choice problem x
     });
 
     $optionB.addEventListener('click', function(){
@@ -227,7 +270,6 @@
       var optionBValue = config.option_b_value();
       $finalDecision.innerHTML = optionBValue;
       currentDecision = optionBValue;
-      //send to option a end point for choice problem x
       sendSampleValue('b',optionBValue)
     });
 
@@ -236,7 +278,6 @@
       if( currentDecision !== null){
         console.log('Confirm Decision clicked');
         sendFinalDecisionValue(currentDecision)
-        //send to option a end point for choice problem x
       }
 
     });
@@ -244,34 +285,4 @@
 
   bindEvents();
 
-})()
-
-//results should be tracked per person
-//write to database a user
-// var user = {
-//   id: "asdkaoekas",
-//   results: {
-//     "choice-problem-1": {
-//       samples : [
-//         {option:'a', value: 1},
-//         {option:'b', value: 0.25},
-//         {option:'b', value: 0.25},
-//         {option:'b', value: 0.25},
-//         {option:'a', value: 0.25}
-//       ],
-//       final_decision: 1
-//     },
-//
-//     "choice-problem-3": [
-//       {option:'a', final_value: 1},
-//       {option:'b', final_value: 0.25},
-//       {option:'b', final_value: 0.25},
-//       {option:'b', final_value: 0.25},
-//       {option:'a', final_value: 0.25}
-//
-//     ]
-//   }
-// }
-
-
-// var numberOfSamples = results.length;
+})();

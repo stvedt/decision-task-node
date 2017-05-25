@@ -13,8 +13,10 @@
       }).then(function(data) {
         //  console.log(data);
         localStorage.setItem('sessionId',data._id);
+        localStorage.removeItem('pageOrder');
 
          console.log('localStorage sessionId set: ', data._id)
+         alert('New session created with ID: ' + data._id);
       })
       .catch(err => {
           //do something smarter here
@@ -27,7 +29,7 @@
     $newSession.addEventListener('click', function(e){
       e.preventDefault();
         console.log('Create New Session clicked');
-        createNewSession()
+        createNewSession();
     });
   }
 
