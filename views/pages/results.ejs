@@ -8,35 +8,47 @@
   </head>
   <body>
     <main>
-      <h1>Sessions <button type="button" name="button" id="new-session">Start New Session</button></h1>
+      <h1>Sessions <button type="button" name="button" id="new-session">Create New Session</button></h1>
       <% sessions.forEach(function(session){%>
         <div class="session">
-          <h4>Session ID: <%= session._id %> | Date: <%= session.updatedAt %></h4>
-          <h5>Samples</h5>
-          <%= session._id %>
-          <% for (var key in session.results) {%>
-            <%= key %>
-            <ol>
-              <% if (session.results[key].samples !== undefined) { %>
-                <% session.results[key].samples.forEach(function(sample){%>
-                  <li>
-                    Option: <b><%= sample.option %></b> |
-                    Value: <b><%= sample.value %></b>
-                  </li>
-                <% }); %>
-              <% } %>
-
-            </ol>
-            <p><b>Final Decision: </b> <%= session.results[key].final_decision %></p>
-          <% } %>
-
+          <div class="session-title">
+            <h2>Session ID: <%= session._id %> | Date: <%= session.updatedAt %></h2>
+          </div>
+          <div class="session-content">
+            <h3>Samples</h3>
+            <% for (var key in session.results) {%>
+              <div class="choice-problem">
+                <% if (key !== "total_amount" ) { %>
+                  <h4><%= key %></h4>
+                  <table>
+                    <tr>
+                      <th>Option</th>
+                      <th>Value</th>
+                    </tr>
+                    <% if (session.results[key].samples !== undefined ) { %>
+                      <% session.results[key].samples.forEach(function(sample){%>
+                        <tr>
+                          <td> <b><%= sample.option %></b> </td>
+                          <td> <b><%= sample.value %></b> </td>
+                        </tr>
+                      <% }); %>
+                    <% } %>
+                    <tr>
+                      <td> <b>Final Decision:</b> </td>
+                      <td> <%= session.results[key].final_decision %></td>
+                    </tr>
+                  </table>
+                <% }%>
+              </div>
+            <% } %>
+          </div>
         </div>
 
       <% }); %>
 
     </main>
 
-    <script type="text/javascript" src="/js/admin.js"></script>
+    <script type="text/javascript" src="/js/results.js"></script>
 
   </body>
 </html>
