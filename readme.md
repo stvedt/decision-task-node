@@ -37,10 +37,10 @@ View Logs:
 `heroku logs --tail`
 
 ### Next Steps
-
-- Randomize Order or Problem Set
 - Obfuscate to User actual Choice Problem Number
 - CSV or cleaner export
+- Create new session when all choice problems are completed.
+- Move pages Object to JSON file.
 
 ### For later release
 
