@@ -85,7 +85,6 @@ var baseSession = {
       total_amount: 9
   }
 };
-var newSession = new Session(baseSession);
 //Task
 
 var taskSchema = mongoose.Schema({
@@ -191,6 +190,8 @@ app.get('/get-total/', function(req, res){
 app.use('/create-session/', function(req, res){
 
   console.log('create new session');
+
+  var newSession = new Session(baseSession);
 
   newSession.save(function (err, savedSession) {
     console.log('save started');
