@@ -1,5 +1,25 @@
 (function(){
-  // "choice-problem-1" will be replaced with hashed page name
+
+  function init(){
+    config = getCurrentChoiceProblem();
+    bindEvents();
+  }
+
+  var config,
+      currentDecision = null,
+      animating = false,
+      sessionId,
+      pageOrder,
+      pages;
+  // all things DOM
+  var $optionA = document.getElementById('option-a'),
+      $optionB = document.getElementById('option-b'),
+      $totalAmount = document.getElementById('total-amount'),
+      $confirmDecision = document.getElementById('confirm-decision'),
+      $nextProblem = document.getElementById('next-problem'),
+      $finalDecision = document.getElementById('final-decision').getElementsByClassName('value')[0];
+
+
   function getPageJSONData(){
     fetch("/js/pages.json", {
       method: "GET"
@@ -17,7 +37,6 @@
         throw err;
     });
   }
-  getPageJSONData();
 
   function createNewSession(){
     fetch("/create-session/", {
@@ -101,7 +120,6 @@
       // console.log(pageOrder);
     }
   }
-  setupLocalStorage();
 
   function updateNextProblem(failed){
     if(!failed){
@@ -118,25 +136,6 @@
     $nextProblem.classList.remove('disabled');
     $confirmDecision.classList.add('disabled');
   }
-
-  function init(){
-    config = getCurrentChoiceProblem()
-  }
-
-  var config,
-      currentDecision = null,
-      animating = false,
-      sessionId,
-      pageOrder,
-      pages;
-  // all things DOM
-  var $optionA = document.getElementById('option-a'),
-      $optionB = document.getElementById('option-b'),
-      $totalAmount = document.getElementById('total-amount'),
-      $confirmDecision = document.getElementById('confirm-decision'),
-      $nextProblem = document.getElementById('next-problem'),
-      $finalDecision = document.getElementById('final-decision').getElementsByClassName('value')[0];
-
 
   function getCurrentChoiceProblem(){
     var path = window.location.pathname;
@@ -242,6 +241,7 @@
     });
   }
 
-  bindEvents();
+  getPageJSONData();
+  setupLocalStorage();
 
 })();
