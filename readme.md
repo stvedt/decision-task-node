@@ -42,6 +42,11 @@ View Logs:
 - Create new session when all choice problems are completed.
 - Move pages Object to JSON file.
 
+- Choice problem urls in order
+- Breakout sample from finals into separate Steps (make actual decision)
+- Decimals show to hundredths two decimals
+
+
 ### For later release
 
 - Questionnaire Support
