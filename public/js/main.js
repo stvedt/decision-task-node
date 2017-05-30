@@ -114,7 +114,7 @@
       console.log('first:',arrayOfPageKeys);
       var newArrayOfPageKeys = shuffleArray(arrayOfPageKeys);
       pageOrder = [];
-      for(var i = 0; i <=8; i++){
+      for(var i = 0; i <=7; i++){
         var urlString = "choice-problem-" + (i+1);
         pageOrder[i] = {
           url: urlString,
@@ -173,17 +173,17 @@
     if(option === 'a' && !final){
       $optionA.classList.add('active');
       $optionB.classList.remove('active');
-      $optionA.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
+      $optionA.innerHTML = currentDecision.toFixed(2);
       setTimeout(function(){
-        $optionA.innerHTML = "<h3>Option A</h3>";
+        $optionA.innerHTML = "Option A";
         $optionA.classList.remove('active');
       }, 2000);
     } else if( option === 'b' && !final){
       $optionA.classList.remove('active');
       $optionB.classList.add('active');
-      $optionB.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
+      $optionB.innerHTML = currentDecision.toFixed(2);
       setTimeout(function(){
-        $optionB.innerHTML = "<h3>Option B</h3>";
+        $optionB.innerHTML = "Option B";
         $optionB.classList.remove('active');
       }, 2000);
     }

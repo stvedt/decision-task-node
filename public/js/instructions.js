@@ -39,21 +39,19 @@
       console.log('first:',arrayOfPageKeys);
       var newArrayOfPageKeys = shuffleArray(arrayOfPageKeys);
       var pageOrder = [];
-      for(var i = 0; i <=8; i++){
+      for(var i = 0; i <=7; i++){
         var urlString = "choice-problem-" + (i+1);
         pageOrder[i] = {
           url: urlString,
           problem: newArrayOfPageKeys[i]
         }
       }
-      console.log('new:', newArrayOfPageKeys);
       localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
-      pageOrder =  newArrayOfPageKeys;
     } else {
       console.log('pageOrder is already set');
       pageOrder = JSON.parse(localStorage.getItem('pageOrder'));
     }
-
+    console.log(pageOrder);
     var $nextProblem = document.getElementById('next-problem');
     $nextProblem.href = pageOrder[0].url;
   }
