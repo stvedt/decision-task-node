@@ -41,6 +41,14 @@ View Logs:
 - CSV or cleaner export
 - Create new session when all choice problems are completed.
 - Move pages Object to JSON file.
+- Work on results ordering
+
+- Choice problem urls in order
+- Breakout sample from finals into separate Steps (make actual decision)
+- Display values in buttons
+- Decimals show to hundredths two decimals
+- Styling pass/make it look good.
+
 
 ### For later release
 

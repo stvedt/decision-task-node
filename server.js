@@ -234,8 +234,8 @@ app.put('/send-final-decision/', function(req, res){
 
     if ( doc.results[req.query.problem].completed ) {
       console.log('already marked as completed');
-      res.status(400);
-      res.send('already marked as completed');
+      // res.status(401);
+      res.send({"status": 401, "message": "already submitted"});
     } else {
       doc.results[req.query.problem].final_decision = req.query.value ;
       doc.results[req.query.problem].completed = true;

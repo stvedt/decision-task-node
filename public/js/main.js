@@ -14,10 +14,12 @@
   // all things DOM
   var $optionA = document.getElementById('option-a'),
       $optionB = document.getElementById('option-b'),
+      $optionAFinal = document.getElementById('option-a-final'),
+      $optionBFinal = document.getElementById('option-b-final'),
       $totalAmount = document.getElementById('total-amount'),
-      $confirmDecision = document.getElementById('confirm-decision'),
       $nextProblem = document.getElementById('next-problem'),
-      $finalDecision = document.getElementById('final-decision').getElementsByClassName('value')[0];
+      $finalChoices = document.getElementById('final-choices');
+      // $finalDecision = document.getElementById('final-decision').getElementsByClassName('value')[0];
 
 
   function getPageJSONData(){
@@ -122,19 +124,21 @@
   }
 
   function updateNextProblem(failed){
-    if(!failed){
-        pageOrder.splice(0,1);
+    if (!failed){
+      pageOrder.splice(0,1);
     }
     $nextProblem.href = pageOrder[0];
     localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
 
     if(pageOrder.length == 0){
-      $nextProblem.href = "/results/";
-      $nextProblem.innerHTML = "Completed: See Results";
+      // $nextProblem.href = "/results/";
+      $nextProblem.innerHTML = "All Choice Problems Completed";
+      nextProblem.classList.add('disabled');
+    } else {
+      $nextProblem.classList.remove('disabled');
     }
 
-    $nextProblem.classList.remove('disabled');
-    $confirmDecision.classList.add('disabled');
+
   }
 
   function getCurrentChoiceProblem(){
@@ -153,14 +157,35 @@
     }, 1000);
   }
 
-  function toggleOptionActiveClass ( option ) {
-    if(option === 'a'){
+  function toggleOptionActiveClass ( option, final ) {
+    if(option === 'a' && !final){
       $optionA.classList.add('active');
       $optionB.classList.remove('active');
-    } else if( option === 'b'){
+      $optionA.innerHTML = "<h3>" + currentDecision + "</h3>";
+      setTimeout(function(){
+        $optionA.innerHTML = "<h3>Option A</h3>";
+        $optionA.classList.remove('active');
+      }, 2000);
+    } else if( option === 'b' && !final){
       $optionA.classList.remove('active');
       $optionB.classList.add('active');
+      $optionB.innerHTML = "<h3>" + currentDecision + "</h3>";
+      setTimeout(function(){
+        $optionB.innerHTML = "<h3>Option B</h3>";
+        $optionB.classList.remove('active');
+      }, 2000);
     }
+
+    if(option === 'a' && final){
+      $optionAFinal.classList.add('active');
+      $optionBFinal.classList.remove('active');
+      $optionAFinal.innerHTML = "<h3>" + currentDecision + "</h3>";
+    } else if( option === 'b' && final){
+      $optionAFinal.classList.remove('active');
+      $optionBFinal.classList.add('active');
+      $optionBFinal.innerHTML = "<h3>" + currentDecision + "</h3>";
+    }
+
 
   }
 
@@ -190,15 +215,18 @@
       console.log('successful final decision submit');
       return response.json();
     }).then(function(data) {
-       console.log("Set button state");
+      //  console.log("Set button state");
        console.log(data);
-       $totalAmount.innerHTML = data.results.total_amount.toFixed(2);
-       $confirmDecision.classList.add('disabled');
-       updateNextProblem();
+       if (data.status == 401){
+         updateNextProblem(true);
+       } else {
+         $totalAmount.innerHTML = data.results.total_amount.toFixed(2);
+         updateNextProblem();
+       }
     })
     .catch(err => {
         //do something smarter here
-        updateNextProblem(true);
+        console.log(err)
         throw err;
     });
   }
@@ -208,37 +236,39 @@
     $optionA.addEventListener('click', function(){
       if (animating) { return; }
       console.log('option A clicked');
-
-      toggleOptionActiveClass('a');
-      animateSample();
-
-      $finalDecision.innerHTML = config.option_a_value;
       currentDecision = config.option_a_value;
-
+      toggleOptionActiveClass('a');
       sendSampleValue('a',config.option_a_value);
     });
 
     $optionB.addEventListener('click', function(){
       if (animating) { return; }
       console.log('option B clicked');
-
-      toggleOptionActiveClass('b');
-      animateSample();
-
       var optionBValue = getOptionBValue(config.option_b_value);
-      $finalDecision.innerHTML = optionBValue;
       currentDecision = optionBValue;
+      toggleOptionActiveClass('b');
       sendSampleValue('b',optionBValue)
     });
 
-    $confirmDecision.addEventListener('click', function(e){
-      e.preventDefault();
-      if( currentDecision !== null){
-        console.log('Confirm Decision clicked');
-        sendFinalDecisionValue(currentDecision)
-      }
-
+    $optionAFinal.addEventListener('click', function(){
+      if (animating) { return; }
+      console.log('option A Final clicked');
+      currentDecision = config.option_a_value;
+      toggleOptionActiveClass('a', true);
+      sendFinalDecisionValue(currentDecision);
+      $finalChoices.classList.add('disabled');
     });
+
+    $optionBFinal.addEventListener('click', function(){
+      if (animating) { return; }
+      console.log('option B Final clicked');
+      var optionBValue = getOptionBValue(config.option_b_value);
+      currentDecision = optionBValue;
+      toggleOptionActiveClass('b',true);
+      sendFinalDecisionValue(currentDecision);
+      $finalChoices.classList.add('disabled');
+    });
+
   }
 
   getPageJSONData();

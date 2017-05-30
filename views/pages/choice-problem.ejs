@@ -4,6 +4,7 @@
     <meta name="description" content="Decision Task">
     <meta charset="utf-8">
     <title>Choice Problem</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" href="/css/master.css" />
   </head>
   <body>
@@ -12,7 +13,7 @@
         Total Amount: $<span id="total-amount">9</span>
       </div>
       <h1>Decision-making Game</h1>
-      <h2>Choice Problem</h2>
+      <h2>Step 1: Sample</h2>
       <div id="game">
         <div class="option-box" id="option-a">
           <h3>Option A</h3>
@@ -22,13 +23,20 @@
           <h3>Option B</h3>
           <!-- <p class="value">0 or 1</p> -->
         </div>
-
-        <div class="option-box final-decision" id="final-decision">
-          <h3>Final Decision</h3>
-          <p class="value">-</p>
+        <br><br><br><br>
+        <div id="final-choices">
+          <h2>Step 2: Make Actual Decision</h2>
+          <div class="option-box" id="option-a-final">
+            <h3>Option A</h3>
+            <!-- <p class="value">0.25</p> -->
+          </div>
+          <div class="option-box" id="option-b-final">
+            <h3>Option B</h3>
+            <!-- <p class="value">0 or 1</p> -->
+          </div>
+          <!-- <a class="button" id="confirm-decision" href="#">Make Actual Decision</a> -->
         </div>
-        <a class="button" id="confirm-decision" href="#">Confirm Decision</a>
-        <br> <br>
+        <br> <br><br>
         <a class="button disabled" id="next-problem" href="#">Next Choice Problem</a>
       </div>
     </main>
