@@ -158,8 +158,6 @@
         return pages[pageOrder[i].problem];
       }
     }
-
-
   }
 
   function animateSample(){
@@ -175,7 +173,7 @@
     if(option === 'a' && !final){
       $optionA.classList.add('active');
       $optionB.classList.remove('active');
-      $optionA.innerHTML = "<h3>" + currentDecision + "</h3>";
+      $optionA.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
       setTimeout(function(){
         $optionA.innerHTML = "<h3>Option A</h3>";
         $optionA.classList.remove('active');
@@ -183,7 +181,7 @@
     } else if( option === 'b' && !final){
       $optionA.classList.remove('active');
       $optionB.classList.add('active');
-      $optionB.innerHTML = "<h3>" + currentDecision + "</h3>";
+      $optionB.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
       setTimeout(function(){
         $optionB.innerHTML = "<h3>Option B</h3>";
         $optionB.classList.remove('active');
@@ -193,11 +191,11 @@
     if(option === 'a' && final){
       $optionAFinal.classList.add('active');
       $optionBFinal.classList.remove('active');
-      $optionAFinal.innerHTML = "<h3>" + currentDecision + "</h3>";
+      $optionAFinal.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
     } else if( option === 'b' && final){
       $optionAFinal.classList.remove('active');
       $optionBFinal.classList.add('active');
-      $optionBFinal.innerHTML = "<h3>" + currentDecision + "</h3>";
+      $optionBFinal.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
     }
 
 
