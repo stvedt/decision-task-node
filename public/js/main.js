@@ -1,7 +1,7 @@
 (function(){
 
   function init(){
-    config = getCurrentChoiceProblem();
+    setupLocalStorage();
     bindEvents();
   }
 
@@ -111,14 +111,21 @@
       for (key in pages){
         arrayOfPageKeys.push(key);
       }
-      arrayOfPageKeys = shuffleArray(arrayOfPageKeys);
-      console.log(arrayOfPageKeys);
-      localStorage.setItem('pageOrder', arrayOfPageKeys);
-      pageOrder =  arrayOfPageKeys;
+      console.log('first:',arrayOfPageKeys);
+      var newArrayOfPageKeys = shuffleArray(arrayOfPageKeys);
+      pageOrder = [];
+      for(var i = 0; i <=7; i++){
+        var urlString = "choice-problem-" + (i+1);
+        pageOrder[i] = {
+          url: urlString,
+          problem: newArrayOfPageKeys[i]
+        }
+      }
     } else {
       console.log('pageOrder is already set');
       pageOrder = localStorage.getItem('pageOrder');
       pageOrder = JSON.parse(pageOrder);
+      config = getCurrentChoiceProblem();
       // console.log(pageOrder);
     }
   }
@@ -127,7 +134,7 @@
     if (!failed){
       pageOrder.splice(0,1);
     }
-    $nextProblem.href = pageOrder[0];
+    $nextProblem.href = pageOrder[0].url;
     localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
 
     if(pageOrder.length == 0){
@@ -145,7 +152,12 @@
     var path = window.location.pathname;
     path = path.replace('/','')
     console.log("path:",path);
-    return pages[path];
+    for(var i = 0; i <=pageOrder.length; i++){
+      if( pageOrder[i].url == path){
+        console.log("working on: " + pageOrder[i].problem);
+        return pages[pageOrder[i].problem];
+      }
+    }
   }
 
   function animateSample(){
@@ -161,17 +173,17 @@
     if(option === 'a' && !final){
       $optionA.classList.add('active');
       $optionB.classList.remove('active');
-      $optionA.innerHTML = "<h3>" + currentDecision + "</h3>";
+      $optionA.innerHTML = currentDecision.toFixed(2);
       setTimeout(function(){
-        $optionA.innerHTML = "<h3>Option A</h3>";
+        $optionA.innerHTML = "Option A";
         $optionA.classList.remove('active');
       }, 2000);
     } else if( option === 'b' && !final){
       $optionA.classList.remove('active');
       $optionB.classList.add('active');
-      $optionB.innerHTML = "<h3>" + currentDecision + "</h3>";
+      $optionB.innerHTML = currentDecision.toFixed(2);
       setTimeout(function(){
-        $optionB.innerHTML = "<h3>Option B</h3>";
+        $optionB.innerHTML = "Option B";
         $optionB.classList.remove('active');
       }, 2000);
     }
@@ -179,11 +191,11 @@
     if(option === 'a' && final){
       $optionAFinal.classList.add('active');
       $optionBFinal.classList.remove('active');
-      $optionAFinal.innerHTML = "<h3>" + currentDecision + "</h3>";
+      $optionAFinal.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
     } else if( option === 'b' && final){
       $optionAFinal.classList.remove('active');
       $optionBFinal.classList.add('active');
-      $optionBFinal.innerHTML = "<h3>" + currentDecision + "</h3>";
+      $optionBFinal.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
     }
 
 
@@ -272,6 +284,5 @@
   }
 
   getPageJSONData();
-  setupLocalStorage();
 
 })();

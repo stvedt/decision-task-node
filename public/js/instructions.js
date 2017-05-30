@@ -38,15 +38,21 @@
       }
       console.log('first:',arrayOfPageKeys);
       var newArrayOfPageKeys = shuffleArray(arrayOfPageKeys);
-      console.log('new:', newArrayOfPageKeys);
-      localStorage.setItem('pageOrder', JSON.stringify(newArrayOfPageKeys));
-      pageOrder =  newArrayOfPageKeys;
+      var pageOrder = [];
+      for(var i = 0; i <=7; i++){
+        var urlString = "choice-problem-" + (i+1);
+        pageOrder[i] = {
+          url: urlString,
+          problem: newArrayOfPageKeys[i]
+        }
+      }
+      localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
     } else {
       console.log('pageOrder is already set');
       pageOrder = JSON.parse(localStorage.getItem('pageOrder'));
     }
-
+    console.log(pageOrder);
     var $nextProblem = document.getElementById('next-problem');
-    $nextProblem.href = pageOrder[0];
+    $nextProblem.href = pageOrder[0].url;
   }
 })();

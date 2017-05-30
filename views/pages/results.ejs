@@ -3,23 +3,26 @@
   <head>
     <meta name="description" content="Decision Task">
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Decision-making Game - Results</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/results.css" />
   </head>
   <body>
     <main>
-      <h1>Sessions <button type="button" name="button" id="new-session">Create New Session</button></h1>
+      <h1>Sessions <button type="button" name="button" class="btn btn-success" id="new-session">Create New Session</button></h1>
       <% sessions.forEach(function(session){%>
         <div class="session">
           <div class="session-title">
-            <h2>Session ID: <%= session._id %> | Date: <%= session.updatedAt %></h2>
+            <h4>Session ID: <%= session._id %> | Date: <%= session.updatedAt %></h4>
           </div>
           <div class="session-content">
-            <h3>Samples</h3>
+            <h4>Samples</h4>
             <% for (var key in session.results) {%>
               <div class="choice-problem">
                 <% if (key !== "total_amount" ) { %>
-                  <h4><%= key %></h4>
+                  <h5><%= key %></h5>
                   <table>
                     <tr>
                       <th>Option</th>
