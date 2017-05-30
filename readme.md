@@ -37,19 +37,13 @@ View Logs:
 `heroku logs --tail`
 
 ### Next Steps
-- Obfuscate to User actual Choice Problem Number
-- CSV or cleaner export
-- Create new session when all choice problems are completed.
-- Move pages Object to JSON file.
-- Work on results ordering
 
-- Choice problem urls in order
-- Breakout sample from finals into separate Steps (make actual decision)
-- Display values in buttons
-- Decimals show to hundredths two decimals
-- Styling pass/make it look good.
+- Create new session when all choice problems are completed.
+- Work on results ordering
+- Samples and decisions have $?
 
 
 ### For later release
 
 - Questionnaire Support
+- Cleaner export
