@@ -1,3 +1,8 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: rgba(0, 150, 0, 0.1);
+}
+
 h1 {
   font-weight: normal;
   margin-bottom: 75px;
@@ -31,6 +36,9 @@ main {
 
 .button.disabled {
   opacity: 0.3;
+}
+
+.disabled {
   pointer-events: none;
 }
 
@@ -44,8 +52,10 @@ main {
 }
 .option-box {
   display: inline-block;
-  border: 1px solid black;
-  width: 40%;
+  border: 2px solid #777;
+  border-radius: 15px;
+  width: 30%;
+  margin: 0 15px;
 }
 
 .option-box.active { border: 2px solid black; }
