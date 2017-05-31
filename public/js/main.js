@@ -11,7 +11,8 @@
       pageOrder,
       pages;
   // all things DOM
-  var $optionA = document.getElementById('option-a'),
+  var $pageTitle = document.getElementById('page-title'),
+      $optionA = document.getElementById('option-a'),
       $optionB = document.getElementById('option-b'),
       $optionAFinal = document.getElementById('option-a-final'),
       $optionBFinal = document.getElementById('option-b-final'),
@@ -146,12 +147,12 @@
       $nextProblem.classList.remove('disabled');
     }
 
-
   }
 
   function getCurrentChoiceProblem(){
     var path = window.location.pathname;
     path = path.replace('/','')
+    $pageTitle.innerHTML = "Choice Problem " + path.substr(path.length - 1);
     console.log("path:",path);
     for(var i = 0; i <pageOrder.length; i++){
       if( pageOrder[i].url == path){
