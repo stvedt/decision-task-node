@@ -41,6 +41,8 @@ View Logs:
 - Create new session when all choice problems are completed.
 - Work on results ordering
 - Samples and decisions have $?
+- Prevent multiple sample values from showing at same time.
+- Add finish screen.
 
 
 ### For later release
