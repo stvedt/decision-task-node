@@ -131,19 +131,23 @@
   }
 
   function updateNextProblem(failed){
+    console.log('updateNextProblem');
     if (!failed){
       pageOrder.splice(0,1);
     }
-    $nextProblem.href = pageOrder[0].url;
-    localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
-
-    if(pageOrder.length == 1){
+    console.log("problems remaining: ", pageOrder.length);
+    if(pageOrder.length == 0){
       // $nextProblem.href = "/results/";
       console.log('last choice problem');
       $nextProblem.innerHTML = "All Choice Problems Completed";
-      $nextProblem.classList.add('disabled');
+      $nextProblem.classList.remove('btn-success');
+      $nextProblem.classList.add('btn-warning');
+      $nextProblem.href = "/results";
+      $nextProblem.classList.remove('disabled');
       window.confirm('Thank you for completing this exercise.');
     } else {
+      $nextProblem.href = pageOrder[0].url;
+      localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
       $nextProblem.classList.remove('disabled');
     }
 
@@ -162,15 +166,6 @@
       }
     }
   }
-
-  // function animateSample(){
-  //   $finalDecision.classList.add('animate');
-  //   animating = true;
-  //   setTimeout(function(){
-  //     $finalDecision.classList.remove('animate');
-  //     animating = false;
-  //   }, 1500);
-  // }
 
   function toggleOptionActiveClass ( option, final ) {
     if(option === 'a' && !final){
@@ -271,7 +266,7 @@
     });
 
     $optionAFinal.addEventListener('click', function(){
-      if (animating) { return; }
+      if (isActive) { return; }
       console.log('option A Final clicked');
       currentDecision = config.option_a_value;
       toggleOptionActiveClass('a', true);
@@ -280,7 +275,7 @@
     });
 
     $optionBFinal.addEventListener('click', function(){
-      if (animating) { return; }
+      if (isActive) { return; }
       console.log('option B Final clicked');
       var optionBValue = getOptionBValue(config.option_b_value);
       currentDecision = optionBValue;
