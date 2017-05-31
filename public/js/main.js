@@ -6,7 +6,7 @@
 
   var config,
       currentDecision = null,
-      animating = false,
+      isActive = false,
       sessionId,
       pageOrder,
       pages;
@@ -163,32 +163,36 @@
     }
   }
 
-  function animateSample(){
-    $finalDecision.classList.add('animate');
-    animating = true;
-    setTimeout(function(){
-      $finalDecision.classList.remove('animate');
-      animating = false;
-    }, 1000);
-  }
+  // function animateSample(){
+  //   $finalDecision.classList.add('animate');
+  //   animating = true;
+  //   setTimeout(function(){
+  //     $finalDecision.classList.remove('animate');
+  //     animating = false;
+  //   }, 1500);
+  // }
 
   function toggleOptionActiveClass ( option, final ) {
     if(option === 'a' && !final){
+      isActive = true;
       $optionA.classList.add('active');
       $optionB.classList.remove('active');
       $optionA.innerHTML = currentDecision.toFixed(2);
       setTimeout(function(){
         $optionA.innerHTML = "Option A";
         $optionA.classList.remove('active');
-      }, 2000);
+        isActive = false;
+      }, 1500);
     } else if( option === 'b' && !final){
+      isActive = true;
       $optionA.classList.remove('active');
       $optionB.classList.add('active');
       $optionB.innerHTML = currentDecision.toFixed(2);
       setTimeout(function(){
         $optionB.innerHTML = "Option B";
         $optionB.classList.remove('active');
-      }, 2000);
+        isActive = false;
+      }, 1500);
     }
 
     if(option === 'a' && final){
@@ -249,7 +253,7 @@
   function bindEvents(){
 
     $optionA.addEventListener('click', function(){
-      if (animating) { return; }
+      if (isActive) { console.log('already active'); return; }
       console.log('option A clicked');
       currentDecision = config.option_a_value;
       toggleOptionActiveClass('a');
@@ -257,7 +261,7 @@
     });
 
     $optionB.addEventListener('click', function(){
-      if (animating) { return; }
+      if (isActive) { console.log('already active'); return; }
       console.log('option B clicked');
       console.log(config);
       var optionBValue = getOptionBValue(config.option_b_value);
