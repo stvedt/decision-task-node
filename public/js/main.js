@@ -2,17 +2,17 @@
 
   function init(){
     setupLocalStorage();
-    bindEvents();
   }
 
   var config,
       currentDecision = null,
-      animating = false,
+      isActive = false,
       sessionId,
       pageOrder,
       pages;
   // all things DOM
-  var $optionA = document.getElementById('option-a'),
+  var $pageTitle = document.getElementById('page-title'),
+      $optionA = document.getElementById('option-a'),
       $optionB = document.getElementById('option-b'),
       $optionAFinal = document.getElementById('option-a-final'),
       $optionBFinal = document.getElementById('option-b-final'),
@@ -131,71 +131,73 @@
   }
 
   function updateNextProblem(failed){
+    console.log('updateNextProblem');
     if (!failed){
       pageOrder.splice(0,1);
     }
-    $nextProblem.href = pageOrder[0].url;
-    localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
-
+    console.log("problems remaining: ", pageOrder.length);
     if(pageOrder.length == 0){
       // $nextProblem.href = "/results/";
+      console.log('last choice problem');
       $nextProblem.innerHTML = "All Choice Problems Completed";
-      nextProblem.classList.add('disabled');
+      $nextProblem.classList.remove('btn-success');
+      $nextProblem.classList.add('btn-warning');
+      $nextProblem.href = "/results";
+      $nextProblem.classList.remove('disabled');
+      window.confirm('Thank you for completing this exercise.');
     } else {
+      $nextProblem.href = pageOrder[0].url;
+      localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
       $nextProblem.classList.remove('disabled');
     }
-
 
   }
 
   function getCurrentChoiceProblem(){
     var path = window.location.pathname;
     path = path.replace('/','')
+    $pageTitle.innerHTML = "Choice Problem " + path.substr(path.length - 1);
     console.log("path:",path);
-    for(var i = 0; i <=pageOrder.length; i++){
+    for(var i = 0; i <pageOrder.length; i++){
       if( pageOrder[i].url == path){
         console.log("working on: " + pageOrder[i].problem);
+        bindEvents();
         return pages[pageOrder[i].problem];
       }
     }
   }
 
-  function animateSample(){
-    $finalDecision.classList.add('animate');
-    animating = true;
-    setTimeout(function(){
-      $finalDecision.classList.remove('animate');
-      animating = false;
-    }, 1000);
-  }
-
   function toggleOptionActiveClass ( option, final ) {
     if(option === 'a' && !final){
+      isActive = true;
       $optionA.classList.add('active');
       $optionB.classList.remove('active');
       $optionA.innerHTML = currentDecision.toFixed(2);
       setTimeout(function(){
         $optionA.innerHTML = "Option A";
         $optionA.classList.remove('active');
-      }, 2000);
+        isActive = false;
+      }, 1500);
     } else if( option === 'b' && !final){
+      isActive = true;
       $optionA.classList.remove('active');
       $optionB.classList.add('active');
       $optionB.innerHTML = currentDecision.toFixed(2);
       setTimeout(function(){
         $optionB.innerHTML = "Option B";
         $optionB.classList.remove('active');
-      }, 2000);
+        isActive = false;
+      }, 1500);
     }
 
     if(option === 'a' && final){
       $optionAFinal.classList.add('active');
       $optionBFinal.classList.remove('active');
-      $optionAFinal.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
+      $optionAFinal.innerHTML = currentDecision.toFixed(2);
     } else if( option === 'b' && final){
       $optionAFinal.classList.remove('active');
       $optionBFinal.classList.add('active');
-      $optionBFinal.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
+      $optionBFinal.innerHTML = currentDecision.toFixed(2);
     }
 
 
@@ -246,7 +248,7 @@
   function bindEvents(){
 
     $optionA.addEventListener('click', function(){
-      if (animating) { return; }
+      if (isActive) { console.log('already active'); return; }
       console.log('option A clicked');
       currentDecision = config.option_a_value;
       toggleOptionActiveClass('a');
@@ -254,8 +256,9 @@
     });
 
     $optionB.addEventListener('click', function(){
-      if (animating) { return; }
+      if (isActive) { console.log('already active'); return; }
       console.log('option B clicked');
+      console.log(config);
       var optionBValue = getOptionBValue(config.option_b_value);
       currentDecision = optionBValue;
       toggleOptionActiveClass('b');
@@ -263,7 +266,7 @@
     });
 
     $optionAFinal.addEventListener('click', function(){
-      if (animating) { return; }
+      if (isActive) { return; }
       console.log('option A Final clicked');
       currentDecision = config.option_a_value;
       toggleOptionActiveClass('a', true);
@@ -272,7 +275,7 @@
     });
 
     $optionBFinal.addEventListener('click', function(){
-      if (animating) { return; }
+      if (isActive) { return; }
       console.log('option B Final clicked');
       var optionBValue = getOptionBValue(config.option_b_value);
       currentDecision = optionBValue;

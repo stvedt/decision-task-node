@@ -23,7 +23,7 @@ main {
   position: relative;
 }
 
-.button {
+/*.button {
   display: inline-block;
   padding: 10px;
   min-width: 100px;
@@ -33,9 +33,13 @@ main {
   color: black;
   border-radius: 30px;
 }
-
 .button.disabled {
   opacity: 0.3;
+}
+*/
+
+#game .btn {
+  min-width: 180px;
 }
 
 .disabled {
