@@ -2,7 +2,6 @@
 
   function init(){
     setupLocalStorage();
-    bindEvents();
   }
 
   var config,
@@ -137,10 +136,12 @@
     $nextProblem.href = pageOrder[0].url;
     localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
 
-    if(pageOrder.length == 0){
+    if(pageOrder.length == 1){
       // $nextProblem.href = "/results/";
+      console.log('last choice problem');
       $nextProblem.innerHTML = "All Choice Problems Completed";
-      nextProblem.classList.add('disabled');
+      $nextProblem.classList.add('disabled');
+      window.confirm('Thank you for completing this exercise.');
     } else {
       $nextProblem.classList.remove('disabled');
     }
@@ -152,9 +153,10 @@
     var path = window.location.pathname;
     path = path.replace('/','')
     console.log("path:",path);
-    for(var i = 0; i <=pageOrder.length; i++){
+    for(var i = 0; i <pageOrder.length; i++){
       if( pageOrder[i].url == path){
         console.log("working on: " + pageOrder[i].problem);
+        bindEvents();
         return pages[pageOrder[i].problem];
       }
     }
@@ -191,11 +193,11 @@
     if(option === 'a' && final){
       $optionAFinal.classList.add('active');
       $optionBFinal.classList.remove('active');
-      $optionAFinal.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
+      $optionAFinal.innerHTML = currentDecision.toFixed(2);
     } else if( option === 'b' && final){
       $optionAFinal.classList.remove('active');
       $optionBFinal.classList.add('active');
-      $optionBFinal.innerHTML = "<h3>" + currentDecision.toFixed(2) + "</h3>";
+      $optionBFinal.innerHTML = currentDecision.toFixed(2);
     }
 
 
@@ -256,6 +258,7 @@
     $optionB.addEventListener('click', function(){
       if (animating) { return; }
       console.log('option B clicked');
+      console.log(config);
       var optionBValue = getOptionBValue(config.option_b_value);
       currentDecision = optionBValue;
       toggleOptionActiveClass('b');
