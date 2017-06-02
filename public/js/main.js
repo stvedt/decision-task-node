@@ -19,42 +19,18 @@
       $totalAmount = document.getElementById('total-amount'),
       $nextProblem = document.getElementById('next-problem'),
       $finalChoices = document.getElementById('final-choices');
-      // $finalDecision = document.getElementById('final-decision').getElementsByClassName('value')[0];
-
 
   function getPageJSONData(){
     fetch("/js/pages.json", {
       method: "GET"
     }).then(function(response){
-      console.log('successful get JSON File');
       return response.json();
     }).then(function(data) {
       pages = data;
-       console.log(data)
-       init();
+      console.log('successful get JSON File: ',data)
+      init();
     })
     .catch(err => {
-        //do something smarter here
-
-        throw err;
-    });
-  }
-
-  function createNewSession(){
-    fetch("/create-session/", {
-      method: "GET"
-    }).then(function(response){
-      console.log('successful sessions');
-      return response.json();
-    }).then(function(data) {
-      //  console.log(data);
-       localStorage.setItem('sessionId',data._id);
-       sessionId = data._id;
-       console.log('localStorage sessionId set')
-    })
-    .catch(err => {
-        //do something smarter here
-
         throw err;
     });
   }
@@ -63,16 +39,12 @@
     fetch("/get-total/?id="+sessionId, {
       method: "GET"
     }).then(function(response){
-      console.log('successful get total');
       return response.json();
     }).then(function(data) {
-      //  console.log(data);
       $totalAmount.innerHTML = data.toFixed(2);
        console.log('total amount set')
     })
     .catch(err => {
-        //do something smarter here
-
         throw err;
     });
   }
@@ -84,21 +56,12 @@
 
   }
 
-  function shuffleArray(array) {
-      for (var i = array.length - 1; i > 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1));
-          var temp = array[i];
-          array[i] = array[j];
-          array[j] = temp;
-      }
-      return array;
-  }
-
   //Set up localstorage session
-  //create session if one does not exist
   function setupLocalStorage(){
-    if ( localStorage.getItem('sessionId') === null ) {
-      createNewSession();
+    if ( localStorage.getItem('sessionId') === null
+      || localStorage.getItem('pageOrder') === null) {
+      window.confirm("Please see instructions before beginning. Redirecting now.");
+      window.location.href = window.location.origin;
     } else {
       console.log('sessionId already exists:', localStorage.getItem('sessionId'));
       sessionId = localStorage.getItem('sessionId');
@@ -106,27 +69,11 @@
     }
 
     // Randomizing order of pages
-    if ( localStorage.getItem('pageOrder') === null ) {
-      var arrayOfPageKeys = [];
-      for (key in pages){
-        arrayOfPageKeys.push(key);
-      }
-      console.log('first:',arrayOfPageKeys);
-      var newArrayOfPageKeys = shuffleArray(arrayOfPageKeys);
-      pageOrder = [];
-      for(var i = 0; i <=7; i++){
-        var urlString = "choice-problem-" + (i+1);
-        pageOrder[i] = {
-          url: urlString,
-          problem: newArrayOfPageKeys[i]
-        }
-      }
-    } else {
+    if ( localStorage.getItem('pageOrder') !== null ) {
       console.log('pageOrder is already set');
       pageOrder = localStorage.getItem('pageOrder');
       pageOrder = JSON.parse(pageOrder);
       config = getCurrentChoiceProblem();
-      // console.log(pageOrder);
     }
   }
 
@@ -138,17 +85,22 @@
     console.log("problems remaining: ", pageOrder.length);
     if(pageOrder.length == 0){
       // $nextProblem.href = "/results/";
-      console.log('last choice problem');
+      console.log('Now on last choice problem');
       $nextProblem.innerHTML = "All Choice Problems Completed";
       $nextProblem.classList.remove('btn-success');
       $nextProblem.classList.add('btn-warning');
       $nextProblem.href = "/results";
       $nextProblem.classList.remove('disabled');
+      markCompleted();
+
+      localStorage.removeItem('pageOrder');
+      localStorage.removeItem('sessionId');
       window.confirm('Thank you for completing this exercise.');
     } else {
       $nextProblem.href = pageOrder[0].url;
-      localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
       $nextProblem.classList.remove('disabled');
+
+      localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
     }
 
   }
@@ -157,7 +109,7 @@
     var path = window.location.pathname;
     path = path.replace('/','')
     $pageTitle.innerHTML = "Choice Problem " + path.substr(path.length - 1);
-    console.log("path:",path);
+
     for(var i = 0; i <pageOrder.length; i++){
       if( pageOrder[i].url == path){
         console.log("working on: " + pageOrder[i].problem);
@@ -199,8 +151,6 @@
       $optionBFinal.classList.add('active');
       $optionBFinal.innerHTML = currentDecision.toFixed(2);
     }
-
-
   }
 
   function sendSampleValue(option, value){
@@ -214,7 +164,18 @@
       console.log('successful sample put');
       return response.json();
     }).catch(err => {
-        //do something smarter here
+        throw err;
+    });
+  }
+
+  function markCompleted(){
+    var postURL = '/mark-completed/?id=' + sessionId;
+    fetch(postURL, {
+      method: "PUT"
+    }).then(function(response){
+      console.log('successful mark session completed');
+      return response.json();
+    }).catch(err => {
         throw err;
     });
   }
@@ -226,20 +187,18 @@
     fetch(postURL, {
       method: "PUT"
     }).then(function(response){
-      console.log('successful final decision submit');
       return response.json();
     }).then(function(data) {
-      //  console.log("Set button state");
-       console.log(data);
+       console.log('successful final decision submit: ',data);
        if (data.status == 401){
-         updateNextProblem(true);
+         updateNextProblem();
        } else {
          $totalAmount.innerHTML = data.results.total_amount.toFixed(2);
          updateNextProblem();
        }
     })
     .catch(err => {
-        //do something smarter here
+        updateNextProblem(true);
         console.log(err)
         throw err;
     });
@@ -248,7 +207,7 @@
   function bindEvents(){
 
     $optionA.addEventListener('click', function(){
-      if (isActive) { console.log('already active'); return; }
+      if (isActive) { return; }
       console.log('option A clicked');
       currentDecision = config.option_a_value;
       toggleOptionActiveClass('a');
@@ -256,9 +215,8 @@
     });
 
     $optionB.addEventListener('click', function(){
-      if (isActive) { console.log('already active'); return; }
+      if (isActive) { return; }
       console.log('option B clicked');
-      console.log(config);
       var optionBValue = getOptionBValue(config.option_b_value);
       currentDecision = optionBValue;
       toggleOptionActiveClass('b');

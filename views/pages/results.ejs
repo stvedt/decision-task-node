@@ -22,7 +22,7 @@
             <h4>Samples</h4>
             <% for (var key in session.results) {%>
               <div class="choice-problem">
-                <% if (key !== "total_amount" ) { %>
+                <% if (key !== "total_amount" && key !== "session_completed" ) { %>
                   <h5><%= key %></h5>
                   <table>
                     <tr>
