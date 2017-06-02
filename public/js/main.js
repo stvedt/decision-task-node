@@ -30,27 +30,8 @@
       return response.json();
     }).then(function(data) {
       pages = data;
-       console.log(data)
-       init();
-    })
-    .catch(err => {
-        //do something smarter here
-
-        throw err;
-    });
-  }
-
-  function createNewSession(){
-    fetch("/create-session/", {
-      method: "GET"
-    }).then(function(response){
-      console.log('successful sessions');
-      return response.json();
-    }).then(function(data) {
-      //  console.log(data);
-       localStorage.setItem('sessionId',data._id);
-       sessionId = data._id;
-       console.log('localStorage sessionId set')
+      console.log(data)
+      init();
     })
     .catch(err => {
         //do something smarter here
@@ -84,21 +65,12 @@
 
   }
 
-  function shuffleArray(array) {
-      for (var i = array.length - 1; i > 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1));
-          var temp = array[i];
-          array[i] = array[j];
-          array[j] = temp;
-      }
-      return array;
-  }
-
   //Set up localstorage session
   //create session if one does not exist
   function setupLocalStorage(){
-    if ( localStorage.getItem('sessionId') === null ) {
-      createNewSession();
+    if ( localStorage.getItem('sessionId') === null || localStorage.getItem('pageOrder') === null) {
+      window.confirm("Please see instructions before beginning. Redirecting now.");
+      window.location.href = window.location.origin;
     } else {
       console.log('sessionId already exists:', localStorage.getItem('sessionId'));
       sessionId = localStorage.getItem('sessionId');
@@ -106,27 +78,11 @@
     }
 
     // Randomizing order of pages
-    if ( localStorage.getItem('pageOrder') === null ) {
-      var arrayOfPageKeys = [];
-      for (key in pages){
-        arrayOfPageKeys.push(key);
-      }
-      console.log('first:',arrayOfPageKeys);
-      var newArrayOfPageKeys = shuffleArray(arrayOfPageKeys);
-      pageOrder = [];
-      for(var i = 0; i <=7; i++){
-        var urlString = "choice-problem-" + (i+1);
-        pageOrder[i] = {
-          url: urlString,
-          problem: newArrayOfPageKeys[i]
-        }
-      }
-    } else {
+    if ( localStorage.getItem('pageOrder') !== null ) {
       console.log('pageOrder is already set');
       pageOrder = localStorage.getItem('pageOrder');
       pageOrder = JSON.parse(pageOrder);
       config = getCurrentChoiceProblem();
-      // console.log(pageOrder);
     }
   }
 
@@ -144,11 +100,16 @@
       $nextProblem.classList.add('btn-warning');
       $nextProblem.href = "/results";
       $nextProblem.classList.remove('disabled');
+      markCompleted();
+
+      localStorage.removeItem('pageOrder');
+      localStorage.removeItem('sessionId');
       window.confirm('Thank you for completing this exercise.');
     } else {
       $nextProblem.href = pageOrder[0].url;
-      localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
       $nextProblem.classList.remove('disabled');
+
+      localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
     }
 
   }
@@ -219,6 +180,19 @@
     });
   }
 
+  function markCompleted(){
+    var postURL = '/mark-completed/?id=' + sessionId;
+    fetch(postURL, {
+      method: "PUT"
+    }).then(function(response){
+      console.log('successful sample put');
+      return response.json();
+    }).catch(err => {
+        //do something smarter here
+        throw err;
+    });
+  }
+
   function sendFinalDecisionValue(value){
     var postURL =  '/send-final-decision/?id=' + sessionId +
                                    '&problem=' + config.problem +
@@ -232,7 +206,7 @@
       //  console.log("Set button state");
        console.log(data);
        if (data.status == 401){
-         updateNextProblem(true);
+         updateNextProblem();
        } else {
          $totalAmount.innerHTML = data.results.total_amount.toFixed(2);
          updateNextProblem();
