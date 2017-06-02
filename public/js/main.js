@@ -19,23 +19,18 @@
       $totalAmount = document.getElementById('total-amount'),
       $nextProblem = document.getElementById('next-problem'),
       $finalChoices = document.getElementById('final-choices');
-      // $finalDecision = document.getElementById('final-decision').getElementsByClassName('value')[0];
-
 
   function getPageJSONData(){
     fetch("/js/pages.json", {
       method: "GET"
     }).then(function(response){
-      console.log('successful get JSON File');
       return response.json();
     }).then(function(data) {
       pages = data;
-      console.log(data)
+      console.log('successful get JSON File: ',data)
       init();
     })
     .catch(err => {
-        //do something smarter here
-
         throw err;
     });
   }
@@ -44,16 +39,12 @@
     fetch("/get-total/?id="+sessionId, {
       method: "GET"
     }).then(function(response){
-      console.log('successful get total');
       return response.json();
     }).then(function(data) {
-      //  console.log(data);
       $totalAmount.innerHTML = data.toFixed(2);
        console.log('total amount set')
     })
     .catch(err => {
-        //do something smarter here
-
         throw err;
     });
   }
@@ -66,9 +57,9 @@
   }
 
   //Set up localstorage session
-  //create session if one does not exist
   function setupLocalStorage(){
-    if ( localStorage.getItem('sessionId') === null || localStorage.getItem('pageOrder') === null) {
+    if ( localStorage.getItem('sessionId') === null
+      || localStorage.getItem('pageOrder') === null) {
       window.confirm("Please see instructions before beginning. Redirecting now.");
       window.location.href = window.location.origin;
     } else {
@@ -94,7 +85,7 @@
     console.log("problems remaining: ", pageOrder.length);
     if(pageOrder.length == 0){
       // $nextProblem.href = "/results/";
-      console.log('last choice problem');
+      console.log('Now on last choice problem');
       $nextProblem.innerHTML = "All Choice Problems Completed";
       $nextProblem.classList.remove('btn-success');
       $nextProblem.classList.add('btn-warning');
@@ -118,7 +109,7 @@
     var path = window.location.pathname;
     path = path.replace('/','')
     $pageTitle.innerHTML = "Choice Problem " + path.substr(path.length - 1);
-    console.log("path:",path);
+
     for(var i = 0; i <pageOrder.length; i++){
       if( pageOrder[i].url == path){
         console.log("working on: " + pageOrder[i].problem);
@@ -160,8 +151,6 @@
       $optionBFinal.classList.add('active');
       $optionBFinal.innerHTML = currentDecision.toFixed(2);
     }
-
-
   }
 
   function sendSampleValue(option, value){
@@ -175,7 +164,6 @@
       console.log('successful sample put');
       return response.json();
     }).catch(err => {
-        //do something smarter here
         throw err;
     });
   }
@@ -185,10 +173,9 @@
     fetch(postURL, {
       method: "PUT"
     }).then(function(response){
-      console.log('successful sample put');
+      console.log('successful mark session completed');
       return response.json();
     }).catch(err => {
-        //do something smarter here
         throw err;
     });
   }
@@ -200,11 +187,9 @@
     fetch(postURL, {
       method: "PUT"
     }).then(function(response){
-      console.log('successful final decision submit');
       return response.json();
     }).then(function(data) {
-      //  console.log("Set button state");
-       console.log(data);
+       console.log('successful final decision submit: ',data);
        if (data.status == 401){
          updateNextProblem();
        } else {
@@ -213,7 +198,7 @@
        }
     })
     .catch(err => {
-        //do something smarter here
+        updateNextProblem(true);
         console.log(err)
         throw err;
     });
@@ -222,7 +207,7 @@
   function bindEvents(){
 
     $optionA.addEventListener('click', function(){
-      if (isActive) { console.log('already active'); return; }
+      if (isActive) { return; }
       console.log('option A clicked');
       currentDecision = config.option_a_value;
       toggleOptionActiveClass('a');
@@ -230,9 +215,8 @@
     });
 
     $optionB.addEventListener('click', function(){
-      if (isActive) { console.log('already active'); return; }
+      if (isActive) { return; }
       console.log('option B clicked');
-      console.log(config);
       var optionBValue = getOptionBValue(config.option_b_value);
       currentDecision = optionBValue;
       toggleOptionActiveClass('b');
