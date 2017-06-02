@@ -1,6 +1,9 @@
 body {
   font-family: 'Open Sans', sans-serif;
 }
+h5 {
+    margin: 1em 0.75em;
+}
 .session {
   margin: 10px 0;
   background-color: #ccc;
