@@ -31,6 +31,7 @@ var sessionSchema = mongoose.Schema({
   results: {
     type: Object,
       total_amount: Number,
+      session_completed: Boolean,
       choice_problem_1: {
         samples : [
           {
@@ -82,40 +83,10 @@ var baseSession = {
         completed: false,
         samples : []
       },
+      session_completed: false,
       total_amount: 9
   }
 };
-//Task
-
-var taskSchema = mongoose.Schema({
-    name: String,
-    answers: []
-});
-
-var Task = mongoose.model('Task', taskSchema);
-
-var task1 = new Task({
-    name: 'Decision Task 2',
-    answers: [ [1,2,3,4,5], [5,4,3,2,1] ]
-});
-
-//write to database user by id: subjecta
-//send results of respective choice problem
-//
-// task1.save(function (err) {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     console.log('save successful');
-//   }
-// });
-// catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   var err = new Error('Not Found');
-//   err.status = 404;
-//   next(err);
-// });
-
 // error handlers
 
 // development error handler
@@ -154,28 +125,7 @@ app.get('/results/', function(req, res) {
 
 });
 
-app.get('/choice-problem-1/', function(req, res) {
-  res.render('pages/choice-problem');
-});
-app.get('/choice-problem-2/', function(req, res) {
-  res.render('pages/choice-problem');
-});
-app.get('/choice-problem-3/', function(req, res) {
-  res.render('pages/choice-problem');
-});
-app.get('/choice-problem-4/', function(req, res) {
-  res.render('pages/choice-problem');
-});
-app.get('/choice-problem-5/', function(req, res) {
-  res.render('pages/choice-problem');
-});
-app.get('/choice-problem-6/', function(req, res) {
-  res.render('pages/choice-problem');
-});
-app.get('/choice-problem-7/', function(req, res) {
-  res.render('pages/choice-problem');
-});
-app.get('/choice-problem-8/', function(req, res) {
+app.get('/choice-problem-:problem_number/', function(req, res) {
   res.render('pages/choice-problem');
 });
 
@@ -245,6 +195,29 @@ app.put('/send-final-decision/', function(req, res){
 
       doc.markModified('results.'+req.query.problem);
       doc.markModified('results.total_amount');
+      doc.save(function (err, updatedSample) {
+        if (err) return handleError(err);
+        res.send(updatedSample);
+      });
+    }
+  });
+});
+
+app.put('/mark-completed/', function(req, res){
+  // console.log("req: ", req);
+  req.params.problemNumber;
+
+  Session.findOne({ _id: req.query.id }, function (err, doc){
+
+    if ( doc.results.session_completed ) {
+      console.log('Session already marked as completed');
+      // res.status(401);
+      res.send({"status": 401, "message": "Session already completed"});
+    } else {
+      doc.results.session_completed = true;
+      console.log('mark session as completed');
+
+      doc.markModified('results.session_completed');
       doc.save(function (err, updatedSample) {
         if (err) return handleError(err);
         res.send(updatedSample);
