@@ -32,6 +32,7 @@
   function setupLocalStorage(){
 
     if ( localStorage.getItem('sessionId') === null ) {
+      console.log('sessionId does not exist yet');
       createNewSession();
     } else {
       console.log('sessionId already exists:', localStorage.getItem('sessionId'));
