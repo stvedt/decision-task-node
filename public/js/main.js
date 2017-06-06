@@ -27,7 +27,7 @@
       return response.json();
     }).then(function(data) {
       pages = data;
-      console.log('successful get JSON File: ',data)
+      console.log('successfully imported pages.json');
       init();
     })
     .catch(err => {
@@ -42,17 +42,26 @@
       return response.json();
     }).then(function(data) {
       $totalAmount.innerHTML = data.toFixed(2);
-       console.log('total amount set')
+       console.log('total amount updated')
     })
     .catch(err => {
         throw err;
     });
   }
 
-  function getOptionBValue(array){
-      var optionBvalues = array;
-      var randomNumber = Math.floor(Math.random() * 10);
+  function getOptionBValue(optionBvalues){
+    //array = [0,0,0,0,0,0,0.5,0.5,0.5,0.5]
+    //returns random postion value
+      console.log('getOptionBValue() running');
+      console.log('Option B probability array = ', optionBvalues);
+
+      var randomNumber = Math.floor(Math.random() * 10); // returns random number between 0 and 9
+
+      console.log('random number = ', randomNumber);
+      console.log('optionBvalues at postion ' + randomNumber +  ' = ', optionBvalues[randomNumber]);
       return optionBvalues[randomNumber];
+    //return optionBvaule[9]
+      // return value the postion of the random from probability array
 
   }
 
@@ -78,7 +87,7 @@
   }
 
   function updateNextProblem(failed){
-    console.log('updateNextProblem');
+    console.log('updateNextProblem() running');
     if (!failed){
       pageOrder.splice(0,1);
     }
@@ -161,7 +170,7 @@
     fetch(postURL, {
       method: "PUT"
     }).then(function(response){
-      console.log('successful sample put');
+      console.log('sample successfully stored to database');
       return response.json();
     }).catch(err => {
         throw err;
@@ -189,7 +198,7 @@
     }).then(function(response){
       return response.json();
     }).then(function(data) {
-       console.log('successful final decision submit: ',data);
+       console.log('Final decsison successfully stored to database');
        if (data.status == 401){
          updateNextProblem();
        } else {
@@ -207,7 +216,7 @@
   function bindEvents(){
 
     $optionA.addEventListener('click', function(){
-      if (isActive) { return; }
+      if (isActive) {  return; }
       console.log('option A clicked');
       currentDecision = config.option_a_value;
       toggleOptionActiveClass('a');
@@ -215,7 +224,7 @@
     });
 
     $optionB.addEventListener('click', function(){
-      if (isActive) { return; }
+      if (isActive) {  return; }
       console.log('option B clicked');
       var optionBValue = getOptionBValue(config.option_b_value);
       currentDecision = optionBValue;
