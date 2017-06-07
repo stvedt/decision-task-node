@@ -52,7 +52,15 @@ View Logs (should something on the server side goes wrong):
 5. Push branch to github using `git push origin BRANCH_NAME_HERE`
 6. Open Pull request and merge branch into master. (delete branch optional)
 7. Checkout master locally `git checkout master`
-8. Pull down changes from remote `git pull`
+8. Pull down changes from remote `git fetch`
+9. Merge remote branch with local branch `git merge origin/master`
+
+### Pull Down Changes Only
+
+1. Go to project in terminal on file system:
+`cd ~/Desktop/decision-task-node`
+2. Pull down changes from remote `git fetch`
+3. Merge remote branch with local branch `git merge origin/master`
 
 ### Next Steps
 
