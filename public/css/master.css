@@ -16,11 +16,19 @@ p {
 main {
   /*width: 80%;*/
   max-width: 780px;
-  /*border: 5px solid black;*/
+
   margin: 50px auto 0 auto;
   padding: 5px 5px 20px 5px;
   text-align: center;
   position: relative;
+}
+main.instructions {
+  border: 2px solid rgba(92, 184, 92, 0.5);
+  padding: 10px 10px 20px 10px;
+}
+
+#game h2 {
+  margin-bottom: 0;
 }
 
 /*.button {
