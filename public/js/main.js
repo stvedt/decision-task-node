@@ -104,7 +104,7 @@
 
       localStorage.removeItem('pageOrder');
       localStorage.removeItem('sessionId');
-      window.confirm('Thank you for completing this exercise.');
+      window.confirm('Thank you for playing this decision game!');
     } else {
       $nextProblem.href = pageOrder[0].url;
       $nextProblem.classList.remove('disabled');
