@@ -40,7 +40,11 @@ var sessionSchema = mongoose.Schema({
           }
         ],
         completed: Boolean,
-        final_decision: Number
+        final_decision: {
+          type: Object,
+            option: String,
+            value: Number
+        }
       }
   }
 });
@@ -53,35 +57,67 @@ var baseSession = {
   results: {
       choice_problem_1: {
         completed: false,
-        samples : []
+        samples : [],
+        final_decision: {
+          option: null,
+          value: null
+        }
       },
       choice_problem_2: {
         completed: false,
-        samples : []
+        samples : [],
+        final_decision: {
+          option: null,
+          value: null
+        }
       },
       choice_problem_3: {
         completed: false,
-        samples : []
+        samples : [],
+        final_decision: {
+          option: null,
+          value: null
+        }
       },
       choice_problem_4: {
         completed: false,
-        samples : []
+        samples : [],
+        final_decision: {
+          option: null,
+          value: null
+        }
       },
       choice_problem_5: {
         completed: false,
-        samples : []
+        samples : [],
+        final_decision: {
+          option: null,
+          value: null
+        }
       },
       choice_problem_6: {
         completed: false,
-        samples : []
+        samples : [],
+        final_decision: {
+          option: null,
+          value: null
+        }
       },
       choice_problem_7: {
         completed: false,
-        samples : []
+        samples : [],
+        final_decision: {
+          option: null,
+          value: null
+        }
       },
       choice_problem_8: {
         completed: false,
-        samples : []
+        samples : [],
+        final_decision: {
+          option: null,
+          value: null
+        }
       },
       session_completed: false,
       total_amount: 9
@@ -187,7 +223,10 @@ app.put('/send-final-decision/', function(req, res){
       // res.status(401);
       res.send({"status": 401, "message": "already submitted"});
     } else {
-      doc.results[req.query.problem].final_decision = req.query.value ;
+      doc.results[req.query.problem].final_decision = {
+        option: req.query.option,
+        value: req.query.value
+      };
       doc.results[req.query.problem].completed = true;
       console.log('current total amount',doc.results.total_amount );
       console.log('query value', req.query.value);

@@ -189,10 +189,11 @@
     });
   }
 
-  function sendFinalDecisionValue(value){
+  function sendFinalDecisionValue(value, option){
     var postURL =  '/send-final-decision/?id=' + sessionId +
                                    '&problem=' + config.problem +
-                                     '&value=' + value;
+                                     '&value=' + value +
+                                     '&option=' + option;
     fetch(postURL, {
       method: "PUT"
     }).then(function(response){
@@ -237,7 +238,7 @@
       console.log('option A Final clicked');
       currentDecision = config.option_a_value;
       toggleOptionActiveClass('a', true);
-      sendFinalDecisionValue(currentDecision);
+      sendFinalDecisionValue(currentDecision, 'a');
       $finalChoices.classList.add('disabled');
     });
 
@@ -247,7 +248,7 @@
       var optionBValue = getOptionBValue(config.option_b_value);
       currentDecision = optionBValue;
       toggleOptionActiveClass('b',true);
-      sendFinalDecisionValue(currentDecision);
+      sendFinalDecisionValue(currentDecision, 'b');
       $finalChoices.classList.add('disabled');
     });
 

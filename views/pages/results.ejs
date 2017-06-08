@@ -39,7 +39,7 @@
                     <% } %>
                     <tr>
                       <td> <b>Final Decision:</b> </td>
-                      <td> <%= session.results[key].final_decision %></td>
+                      <td> Option: <%= session.results[key].final_decision.option %> | Value: <%= session.results[key].final_decision.value %> </td>
                     </tr>
                   </table>
                 <% }%>
