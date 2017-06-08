@@ -228,10 +228,9 @@ app.put('/send-final-decision/', function(req, res){
         value: req.query.value
       };
       doc.results[req.query.problem].completed = true;
-      console.log('current total amount',doc.results.total_amount );
       console.log('query value', req.query.value);
-      doc.results.total_amount = Number(doc.results.total_amount) + Number(req.query.value);
-
+      doc.results.total_amount += Number(req.query.value);
+      console.log('new total amount',doc.results.total_amount );
       doc.markModified('results.'+req.query.problem);
       doc.markModified('results.total_amount');
       doc.save(function (err, updatedSample) {
