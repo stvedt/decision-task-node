@@ -16,7 +16,6 @@
       $optionB = document.getElementById('option-b'),
       $optionAFinal = document.getElementById('option-a-final'),
       $optionBFinal = document.getElementById('option-b-final'),
-      $totalAmount = document.getElementById('total-amount'),
       $nextProblem = document.getElementById('next-problem'),
       $finalChoices = document.getElementById('final-choices');
 
@@ -74,7 +73,7 @@
     } else {
       console.log('sessionId already exists:', localStorage.getItem('sessionId'));
       sessionId = localStorage.getItem('sessionId');
-      getTotalAmount();
+      //getTotalAmount();
     }
 
     // Randomizing order of pages
@@ -95,10 +94,10 @@
     if(pageOrder.length == 0){
       // $nextProblem.href = "/results/";
       console.log('Now on last choice problem');
-      $nextProblem.innerHTML = "All Choice Problems Completed";
+      $nextProblem.innerHTML = "Thank You For Your Participation";
       $nextProblem.classList.remove('btn-success');
       $nextProblem.classList.add('btn-warning');
-      $nextProblem.href = "/results";
+      $nextProblem.href = "/complete";
       $nextProblem.classList.remove('disabled');
       markCompleted();
 
