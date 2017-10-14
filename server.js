@@ -152,6 +152,15 @@ app.get('/', function(req, res) {
   res.render('pages/index');
 });
 
+app.get('/complete/', function(req, res) {
+  
+    Session.findOne({ _id: req.query.id }, function (err, doc){
+      // res.send(sessions);
+      res.render('pages/complete', { 'doc' : doc });
+    });
+  
+  });
+
 app.get('/results/', function(req, res) {
 
   Session.find({}, function(err, sessions){
