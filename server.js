@@ -153,12 +153,13 @@ app.get('/', function(req, res) {
 });
 
 app.get('/complete/', function(req, res) {
-  
+
     Session.findOne({ _id: req.query.id }, function (err, doc){
+      console.log('complete doc:',doc)
       // res.send(sessions);
       res.render('pages/complete', { 'doc' : doc });
     });
-  
+
   });
 
 app.get('/results/', function(req, res) {
