@@ -97,13 +97,14 @@
       $nextProblem.innerHTML = "Thank You For Your Participation";
       $nextProblem.classList.remove('btn-success');
       $nextProblem.classList.add('btn-warning');
+      $nextProblem.classList.remove('hide');
       $nextProblem.href = "/complete";
       $nextProblem.classList.remove('disabled');
       markCompleted();
 
       localStorage.removeItem('pageOrder');
-      localStorage.removeItem('sessionId');
-      window.confirm('Thank you for playing this decision game!');
+      //localStorage.removeItem('sessionId');
+      //window.confirm('Thank you for playing this decision game!');
     } else {
       $nextProblem.href = pageOrder[0].url;
       $nextProblem.classList.remove('disabled');
@@ -115,8 +116,14 @@
 
   function getCurrentChoiceProblem(){
     var path = window.location.pathname;
-    path = path.replace('/','')
-    $pageTitle.innerHTML = "Choice Problem " + path.substr(path.length - 1);
+    path = path.replace('/','');
+
+    var problemNumber = path.substr(path.length - 1)
+    $pageTitle.innerHTML = "Choice Problem " + problemNumber;
+
+    if(problemNumber == "8") {
+      $nextProblem.classList.add('hide');
+    }
 
     for(var i = 0; i <pageOrder.length; i++){
       if( pageOrder[i].url == path){
@@ -202,7 +209,7 @@
        if (data.status == 401){
          updateNextProblem();
        } else {
-         $totalAmount.innerHTML = data.results.total_amount.toFixed(2);
+         //$totalAmount.innerHTML = data.results.total_amount.toFixed(2);
          updateNextProblem();
        }
     })

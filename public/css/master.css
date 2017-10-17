@@ -80,6 +80,8 @@ main.instructions {
   animation: colorchange 1s;
 }
 
+.hide { visibility: hidden; }
+
 @keyframes colorchange
 {
   0%   {background: white;}
@@ -91,4 +93,9 @@ main.instructions {
   /*p {
     font-size: 20px;
   }*/
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
 }
