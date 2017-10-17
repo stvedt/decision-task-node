@@ -48,17 +48,18 @@
     });
   }
 
-  function getOptionBValue(optionBvalues){
+  function getOptionValue(optionValues){
     //array = [0,0,0,0,0,0,0.5,0.5,0.5,0.5]
     //returns random postion value
-      console.log('getOptionBValue() running');
-      console.log('Option B probability array = ', optionBvalues);
+      var arrayLength = optionValues.length;
+      console.log('getOptionValue() running');
+      console.log('Option probability array = ', optionValues);
 
-      var randomNumber = Math.floor(Math.random() * 10); // returns random number between 0 and 9
+      var randomNumber = Math.floor(Math.random() * arrayLength); // returns random number between 0 and 9
 
       console.log('random number = ', randomNumber);
-      console.log('optionBvalues at postion ' + randomNumber +  ' = ', optionBvalues[randomNumber]);
-      return optionBvalues[randomNumber];
+      console.log('optionValues at postion ' + randomNumber +  ' = ', optionValues[randomNumber]);
+      return optionValues[randomNumber];
     //return optionBvaule[9]
       // return value the postion of the random from probability array
 
@@ -225,7 +226,8 @@
     $optionA.addEventListener('click', function(){
       if (isActive) {  return; }
       console.log('option A clicked');
-      currentDecision = config.option_a_value;
+      var optionAValue = getOptionValue(config.option_a_value);
+      currentDecision = optionAValue;
       toggleOptionActiveClass('a');
       sendSampleValue('a',config.option_a_value);
     });
@@ -233,7 +235,7 @@
     $optionB.addEventListener('click', function(){
       if (isActive) {  return; }
       console.log('option B clicked');
-      var optionBValue = getOptionBValue(config.option_b_value);
+      var optionBValue = getOptionValue(config.option_b_value);
       currentDecision = optionBValue;
       toggleOptionActiveClass('b');
       sendSampleValue('b',optionBValue)
@@ -242,7 +244,8 @@
     $optionAFinal.addEventListener('click', function(){
       if (isActive) { return; }
       console.log('option A Final clicked');
-      currentDecision = config.option_a_value;
+      var optionAValue = getOptionValue(config.option_a_value);
+      currentDecision = optionAValue;
       toggleOptionActiveClass('a', true);
       sendFinalDecisionValue(currentDecision, 'a');
       $finalChoices.classList.add('disabled');
@@ -251,7 +254,7 @@
     $optionBFinal.addEventListener('click', function(){
       if (isActive) { return; }
       console.log('option B Final clicked');
-      var optionBValue = getOptionBValue(config.option_b_value);
+      var optionBValue = getOptionValue(config.option_b_value);
       currentDecision = optionBValue;
       toggleOptionActiveClass('b',true);
       sendFinalDecisionValue(currentDecision, 'b');
