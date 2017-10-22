@@ -20,9 +20,10 @@
           </div>
           <div class="session-content">
             <h4>Samples</h4>
-            <% for (var key in session.results) {%>
+            Order: <%= session.results.problem_order %>
+            <% for (var key in session.results ) {%>
               <div class="choice-problem">
-                <% if (key !== "total_amount" && key !== "session_completed" ) { %>
+                <% if (key !== "total_amount" && key !== "session_completed"  && key !== "problem_order" ) { %>
                   <h5><%= key %></h5>
                   <table>
                     <tr>
