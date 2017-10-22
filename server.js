@@ -32,6 +32,7 @@ var sessionSchema = mongoose.Schema({
     type: Object,
       total_amount: Number,
       session_completed: Boolean,
+      problem_order: Array,
       choice_problem_1: {
         samples : [
           {
@@ -119,6 +120,7 @@ var baseSession = {
           value: null
         }
       },
+      problem_order: [],
       session_completed: false,
       total_amount: 9
   }
@@ -163,8 +165,10 @@ app.get('/complete/', function(req, res) {
   });
 
 app.get('/results/', function(req, res) {
+  console.log('results test')
 
   Session.find({}, function(err, sessions){
+    console.log(sessions);
     // res.send(sessions);
     res.render('pages/results', { 'sessions' : sessions });
   });
@@ -196,6 +200,7 @@ app.use('/create-session/', function(req, res){
     } else {
 
       console.log('Session created successfully with id: ', newSession._id);
+      console.log(savedSession)
       res.json(savedSession)
     }
   });
@@ -271,6 +276,23 @@ app.put('/mark-completed/', function(req, res){
         res.send(updatedSample);
       });
     }
+  });
+});
+
+app.put('/send-order/', function(req, res){
+  console.log("send-order");
+  // req.params.problemNumber;
+
+  Session.findOne({ _id: req.query.id }, function (err, doc){
+
+      doc.results.problem_order = JSON.parse(req.query.order);
+      console.log('set problem_order');
+
+      doc.markModified('results.problem_order');
+      doc.save(function (err, updatedSample) {
+        if (err) return handleError(err);
+        res.send(updatedSample);
+      });
   });
 });
 

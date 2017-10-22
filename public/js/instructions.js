@@ -29,6 +29,21 @@
       return array;
   }
 
+  function sendOrder(values){
+    //console.log('send order', JSON.stringify(values));
+    var valuesString = JSON.stringify(values);
+    var postURL = '/send-order/?id=' + sessionId + '&order=' + valuesString;
+    fetch(postURL, {
+      method: "PUT"
+    }).then(function(response){
+      console.log('successful send order completed');
+      //return response.json();
+    }).catch(err => {
+        throw err;
+    });
+
+  }
+
   function setupLocalStorage(){
 
     if ( localStorage.getItem('sessionId') === null ) {
@@ -48,14 +63,18 @@
 
       var newArrayOfPageKeys = shuffleArray(arrayOfPageKeys);
       var pageOrder = [];
+      var numbersOnly = [];
       for(var i = 0; i <=7; i++){
         var urlString = "choice-problem-" + (i+1);
         pageOrder[i] = {
           url: urlString,
           problem: newArrayOfPageKeys[i]
         }
+        numbersOnly[i] = newArrayOfPageKeys[i][newArrayOfPageKeys[i].length -1];
       }
-      console.log("New page order created: ",pageOrder)
+      console.log("New page order created: ",pageOrder);
+      console.log('numbersOnly:', numbersOnly);
+      sendOrder(numbersOnly);
       localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
     } else {
       console.log('pageOrder is already set');
