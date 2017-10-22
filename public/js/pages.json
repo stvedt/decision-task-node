@@ -1,8 +1,8 @@
 {
   "choice-problem-1": {
     "problem": "choice_problem_1",
-    "option_a_value": [0.25],
-    "option_b_value": [0,0,0,0,0,0,1,1,1,1]
+    "option_a_value": [0,0,0,0,0,0,1,1,1,1],
+    "option_b_value": [0.25]
   },
   "choice-problem-2": {
     "problem": "choice_problem_2",
@@ -21,13 +21,13 @@
   },
   "choice-problem-5": {
     "problem": "choice_problem_5",
-    "option_a_value": [-0.25],
-    "option_b_value": [0,0,0,0,0,0,-1,-1,-1,-1]
+    "option_a_value": [0,0,0,0,0,0,-1,-1,-1,-1],
+    "option_b_value": [-0.25]
   },
   "choice-problem-6": {
     "problem": "choice_problem_6",
-    "option_a_value": [-0.15],
-    "option_b_value": [0,0,0,0,-0.50,-0.50,-0.50,-0.50,-0.50,-0.50]
+    "option_a_value": [0,0,0,0,-0.50,-0.50,-0.50,-0.50,-0.50,-0.50],
+    "option_b_value": [-0.15]
   },
   "choice-problem-7": {
     "problem": "choice_problem_7",
@@ -36,7 +36,7 @@
   },
   "choice-problem-8": {
     "problem": "choice_problem_8",
-    "option_a_value": [-0.10],
-    "option_b_value": [0,0,0,0,0,0,0,0,0,-2]
+    "option_a_value": [0,0,0,0,0,0,0,0,0,-2],
+    "option_b_value": [-0.10]
   }
 }
