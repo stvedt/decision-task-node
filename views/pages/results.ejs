@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="/css/results.css" />
   </head>
   <body>
-    <main>
 
       <h1>
         Sessions
@@ -22,7 +21,7 @@
                 <td colspan="2"></td>
                 <% for (var key in sessions[0].results ) {%>
                   <% if (key !== "total_amount" && key !== "session_completed"  && key !== "problem_order" ) { %>
-                    <th colspan="5"><%= key %></th>
+                    <th colspan="4"><%= key %></th>
                   <% } %>
                 <% }%>
               </tr>
@@ -33,7 +32,6 @@
 
                 <% for (var key in sessions[0].results ) {%>
                   <% if (key !== "total_amount" && key !== "session_completed"  && key !== "problem_order" ) { %>
-                    <td>Problem #</td>
                     <td>Option B</td>
                     <td>Sampling Pattern</td>
                     <td>Final Decision</td>
@@ -50,9 +48,6 @@
 
 
                     <% if (key !== "total_amount" && key !== "session_completed"  && key !== "problem_order" ) { %>
-                      <td>
-                        <%= session.results[key].problem_number %>
-                      </td>
                       <td>
                         <%= session.results[key].risky %>
                       </td>
@@ -80,8 +75,6 @@
             </table>
 
 
-
-    </main>
 
     <script type="text/javascript" src="/js/results.js"></script>
 
