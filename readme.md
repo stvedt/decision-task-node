@@ -77,3 +77,10 @@ View Logs (should something on the server side goes wrong):
 - Questionnaire Support
 - Cleaner export
 - Ensure running with just node.js works
+
+
+## Notes
+- add copyright to V1
+- fix table alignment on results v2
+- Look into subdomain for v2.decisionmaking....
+- Wed 9pm. next meeting.
