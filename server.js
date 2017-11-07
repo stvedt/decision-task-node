@@ -148,7 +148,7 @@ var baseSession = {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    console.log('dev');
+    //console.log('dev');
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
@@ -175,7 +175,7 @@ app.get('/', function(req, res) {
 app.get('/complete/', function(req, res) {
 
     Session.findOne({ _id: req.query.id }, function (err, doc){
-      console.log('complete doc:',doc)
+      //console.log('complete doc:',doc)
       // res.send(sessions);
       res.render('pages/complete', { 'doc' : doc });
     });
@@ -183,10 +183,10 @@ app.get('/complete/', function(req, res) {
   });
 
 app.get('/results/', function(req, res) {
-  console.log('results test')
+  console.log('results')
 
   Session.find({}, function(err, sessions){
-    console.log(sessions);
+    //console.log(sessions);
     // res.send(sessions);
     res.render('pages/results', { 'sessions' : sessions });
   });
@@ -218,7 +218,7 @@ app.use('/create-session/', function(req, res){
     } else {
 
       console.log('Session created successfully with id: ', newSession._id);
-      console.log(savedSession)
+      //console.log(savedSession)
       res.json(savedSession)
     }
   });
