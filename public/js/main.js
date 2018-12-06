@@ -95,7 +95,7 @@
     if(pageOrder.length == 0){
       // $nextProblem.href = "/results/";
       console.log('Now on last choice problem');
-      $nextProblem.innerHTML = "Thank You For Your Participation";
+      $nextProblem.innerHTML = "All choice problems completed";
       $nextProblem.classList.remove('btn-success');
       $nextProblem.classList.add('btn-warning');
       $nextProblem.classList.remove('hide');
