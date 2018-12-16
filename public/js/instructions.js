@@ -1,4 +1,13 @@
 (function(){
+  document.getElementById('consent').addEventListener('change', function(event){
+    var $nextProblem = document.getElementById('next-problem');
+    if(event.target.checked){
+      $nextProblem.classList.remove('disabled');
+    } else {
+      $nextProblem.classList.add('disabled');
+    }
+  });
+
   function getPageJSONData(){
     fetch("/js/pages.json", {
       method: "GET"

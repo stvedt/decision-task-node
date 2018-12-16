@@ -15,9 +15,12 @@
       <h2>Instructions</h2>
       <p>Welcome to this decision-making game. In this task, you will be presented with 8 different choice problems. On each problem, you will choose between two different options, through a two-step process. In step 1, you are allowed to sample repeatedly between both options without earning or losing any money. Each option will provide you with either a certain outcome or an uncertain outcome. Once you are ready to make a final decision, please move to step 2 and select your final option. The value resulting from your final decision will be added to or subtracted from your base pay.
       </p>
-      <p>If you are happy to proceed, then click on the &quot;Play&quot; button.</p>
+      <p>If you are 18 years of age or older and understand the statements <a href="/pdf/consent-form.pdf" target="_blank">defined here</a>, and freely consent to participant in the study, check the &quot;I agree to participate in this study &quot; box to begin the experiment, then click on the &quot;Play&quot; button.</p>
 
-      <a class="btn btn-lg btn-success" id="next-problem" href="#">Play</a>
+      <input type="checkbox" id="consent" name="consent">
+      <label for="consent">I agree to participate in this study</label>
+      <br />
+      <a class="btn btn-lg btn-success disabled" id="next-problem" href="#" >Play</a>
     </main>
     <script type="text/javascript" src="js/instructions.js"></script>
   </body>
