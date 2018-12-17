@@ -172,6 +172,10 @@ app.get('/', function(req, res) {
   res.render('pages/index');
 });
 
+app.get('/form', function(req, res) {
+  res.render('pages/form');
+});
+
 app.get('/complete/', function(req, res) {
 
     Session.findOne({ _id: req.query.id }, function (err, doc){

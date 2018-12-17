@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="description" content="Decision Task">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Decision-making Game</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/master.css" />
+  </head>
+  <body>
+    <main class="instructions">
+      <iframe  id= "google-form" src="" width="640" height="452" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+      <br />
+      <a class="btn btn-lg btn-success" id="next-problem" href="choice-problem-1" >Play</a>
+    </main>
+    <script type="text/javascript">
+      var googleFormSrc = "https://docs.google.com/forms/d/e/1FAIpQLSc0WEI7zz1_3aOEu4yxmzEZtdvsTT2z8AhKuATC6Z3a_Yx9_g/viewform?usp=pp_url&entry.2114198873=" + 
+          localStorage.getItem('sessionId') +
+          "&embedded=true";
+          document.getElementById('google-form').src = googleFormSrc;
+      </script>
+  </body>
+</html>

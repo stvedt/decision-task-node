@@ -90,7 +90,7 @@
       pageOrder = JSON.parse(localStorage.getItem('pageOrder'));
     }
     var $nextProblem = document.getElementById('next-problem');
-    $nextProblem.href = pageOrder[0].url;
+    $nextProblem.href = "form";
   }
 
   function createNewSession(){
