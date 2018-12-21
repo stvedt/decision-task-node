@@ -9,7 +9,7 @@ window.onload = function () {
 
     // event.source is popup/iframe
     // event.data is "the text of the actual message"
-    document.querySelector('#submitButton').style.display = 'block';;
+    document.querySelector('#submitButton').style.display = 'block';
   }
   window.addEventListener("message", receiveMessage, false);
 
