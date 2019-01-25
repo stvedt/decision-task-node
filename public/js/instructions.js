@@ -27,15 +27,6 @@
   }
   getPageJSONData();
 
-  // Mturk Iframe stuff
-  let body = document.getElementsByTagName("body")[0];
-  body.addEventListener('click', function(){
-
-    let expIframe = window.parent;
-    expIframe.postMessage("Task Completed",
-    "*");
-  });
-
   // Randomizing order of pages
   function shuffleArray(array) {
       for (var i = array.length - 1; i > 0; i--) {

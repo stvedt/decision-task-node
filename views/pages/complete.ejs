@@ -21,24 +21,28 @@
     <!-- <a class="btn btn-lg btn-warning" href="/results" style="position:absolute; bottom:15px; left:15px;">Experimenter</a> -->
 
     <script>
-    var $totalAmount = document.getElementById('total-amount');
-    var sessionId = localStorage.getItem('sessionId');
-    console.log('sessionId:',sessionId )
-    function getTotalAmount(){
-      fetch("/get-total/?id="+sessionId, {
-        method: "GET"
-      }).then(function(response){
-        return response.json();
-      }).then(function(data) {
-        $totalAmount.innerHTML = data.toFixed(2);
-         console.log('total amount updated')
-      })
-      .catch(err => {
-          throw err;
-      });
-    }
+      var $totalAmount = document.getElementById('total-amount');
+      var sessionId = localStorage.getItem('sessionId');
+      console.log('sessionId:',sessionId )
+      function getTotalAmount(){
+        fetch("/get-total/?id="+sessionId, {
+          method: "GET"
+        }).then(function(response){
+          return response.json();
+        }).then(function(data) {
+          $totalAmount.innerHTML = data.toFixed(2);
+          console.log('total amount updated')
+        })
+        .catch(err => {
+            throw err;
+        });
+      }
 
-    getTotalAmount();
+      getTotalAmount();
+
+      // Mturk Iframe stuff
+      let expIframe = window.parent;
+      expIframe.postMessage("Task Completed", "*");
     </script>
   </body>
 </html>
