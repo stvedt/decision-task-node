@@ -167,13 +167,16 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 app.get('/', function(req, res) {
-  res.render('pages/index');
+  res.render('pages/consent');
 });
 
-app.get('/form', function(req, res) {
-  res.render('pages/form');
+app.get('/instructions', function(req, res) {
+  res.render('pages/instructions');
+});
+
+app.get('/survey', function(req, res) {
+  res.render('pages/survey');
 });
 
 app.get('/complete/', function(req, res) {
