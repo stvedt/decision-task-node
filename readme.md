@@ -35,6 +35,9 @@ Go to project in terminal on file system:
 Pull down latest files
 `git pull`
 
+Make sure NodeJS dependencies are installed with NPM. (only run this if dependencies (package.json) have changed)
+`npm install`
+
 Checkout branch you would like to work on:
 
 Version 1
@@ -42,9 +45,6 @@ Version 1
 
 Version 2:
 `git checkout start-v2-updates`
-
-Make sure NodeJS dependencies are installed with NPM. (only run this if dependencies have changed)
-`npm install`
 
 Local Run with Heroku
 `heroku local web`
@@ -59,7 +59,7 @@ Open other terminal to commit any changes
 Commit all of your code and be sure they are in the appropriate branch.
 
 Adds all files to be committed into version control:
-`git add .`  or `git add FILE_NAME_HERE`
+`git add .` will add all files that are different or `git add INSERT_FILE_NAME_HERE`
 
 Commits the files with a message:
 `git commit -m 'message about the changes you made go here'`
@@ -90,6 +90,13 @@ heroku restart --remote heroku-v1
 ```
 
 ### Git Workflow (optional)
+
+**Some common commands**
+```bash
+git status
+git diff
+```
+**Use `shift` + `zz` to exit diff**
 
 1. Checkout a new branch from master `git checkout -b BRANCH_NAME_HERE`
 2. Make changes to your files locally.
