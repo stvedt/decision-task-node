@@ -61,7 +61,7 @@ var baseSession = {
       choice_problem_1: {
         completed: false,
         problem_number:1,
-        risky: "NR",
+        risky: "R",
         samples : [],
         final_decision: {
           option: null,
@@ -71,7 +71,7 @@ var baseSession = {
       choice_problem_2: {
         completed: false,
         problem_number:2,
-        risky: "R",
+        risky: "NR",
         samples : [],
         final_decision: {
           option: null,
@@ -81,7 +81,7 @@ var baseSession = {
       choice_problem_3: {
         completed: false,
         problem_number:3,
-        risky: "R",
+        risky: "NR",
         samples : [],
         final_decision: {
           option: null,
@@ -91,7 +91,7 @@ var baseSession = {
       choice_problem_4: {
         completed: false,
         problem_number:4,
-        risky: "R",
+        risky: "NR",
         samples : [],
         final_decision: {
           option: null,
@@ -101,7 +101,7 @@ var baseSession = {
       choice_problem_5: {
         completed: false,
         problem_number:5,
-        risky: "NR",
+        risky: "R",
         samples : [],
         final_decision: {
           option: null,
@@ -111,7 +111,7 @@ var baseSession = {
       choice_problem_6: {
         completed: false,
         problem_number:6,
-        risky: "NR",
+        risky: "R",
         samples : [],
         final_decision: {
           option: null,
@@ -121,7 +121,7 @@ var baseSession = {
       choice_problem_7: {
         completed: false,
         problem_number:7,
-        risky: "R",
+        risky: "NR",
         samples : [],
         final_decision: {
           option: null,
@@ -131,7 +131,7 @@ var baseSession = {
       choice_problem_8: {
         completed: false,
         problem_number:8,
-        risky: "NR",
+        risky: "R",
         samples : [],
         final_decision: {
           option: null,
