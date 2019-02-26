@@ -86,7 +86,7 @@ View Logs (should something on the server side goes wrong):
 Restarting Heroku:
 ```
 heroku restart --remote heroku-v1
-heroku restart --remote heroku-v1
+heroku restart --remote heroku-v2
 ```
 
 ### Git Workflow (optional)
