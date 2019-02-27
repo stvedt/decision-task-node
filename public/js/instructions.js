@@ -52,6 +52,9 @@
     } else {
       console.log('sessionId already exists:', localStorage.getItem('sessionId'));
       sessionId = localStorage.getItem('sessionId');
+      // check if sessions exists
+      getSession();
+
     }
 
     if ( localStorage.getItem('pageOrder') === null ) {
@@ -93,11 +96,35 @@
       }).then(function(data) {
         localStorage.setItem('sessionId',data._id);
         console.log('New session create id: ', data._id)
+
+        // Some clean up with new logic check. Reload Google Form with new session ID
+        var googleFormSrc =
+          "https://docs.google.com/forms/d/e/1FAIpQLSeCtuwfD04lKMH6IJlYEbXMLPa6r9vVUCkGS6zQ3EuCEyFAHw/viewform?usp=pp_url&entry.1588747463=" + 
+            localStorage.getItem('sessionId') +
+            "&embedded=true";
+        document.getElementById('google-form').src = googleFormSrc;
       })
       .catch(err => {
         //do something smarter here
 
         throw err;
       });
+  }
+
+  function getSession(){
+    console.log('get session:', sessionId);
+    var getURL = '/get-session/?id=' + sessionId;
+    fetch(getURL, {
+      method: "GET"
+    }).then(function(response){
+      console.log('get session resp', response);
+      if(response.status === 401){
+        createNewSession();
+      } else {
+        return response.json();
+      }
+    }).catch(err => {
+      throw err;
+    });
   }
 })();
