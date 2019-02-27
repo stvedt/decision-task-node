@@ -15,7 +15,7 @@
         Sessions
         <button type="button" name="button" class="btn btn-success" id="new-session">Create New Session</button>
         <a href="/" class="btn btn-primary">Start</a></h1>
-
+          <% if ( sessions.length > 0 ) { %>
             <table>
               <tr>
                 <td colspan="2"></td>
@@ -73,6 +73,7 @@
 
               <% }); %>
             </table>
+          <% } %>
 
 
 
