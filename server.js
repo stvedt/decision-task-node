@@ -212,6 +212,18 @@ app.get('/get-total/', function(req, res){
   });
 });
 
+app.get('/get-session/', function(req, res){
+  console.log('get-session');
+  Session.findOne({ _id: req.query.id }, function (err, doc){
+    if(doc){
+      res.json(doc.results);
+    } else {
+      res.statusCode = 401;
+      res.send({"message": "Session not found"});
+    }
+  });
+});
+
 app.use('/create-session/', function(req, res){
 
   console.log('create new session');

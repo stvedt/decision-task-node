@@ -44,7 +44,7 @@ Version 1
 `git checkout master`
 
 Version 2:
-`git checkout start-v2-updates`
+`git checkout version-2`
 
 Local Run with Heroku
 `heroku local web`
@@ -72,7 +72,7 @@ V1:
 `git push heroku-v1 master`  
 
 V2:
-`git push heroku-v2 start-v2-updates:master`
+`git push heroku-v2 version-2:master`
 
 Check instance is running(optional):
 `heroku ps:scale web=1`
@@ -86,7 +86,7 @@ View Logs (should something on the server side goes wrong):
 Restarting Heroku:
 ```
 heroku restart --remote heroku-v1
-heroku restart --remote heroku-v1
+heroku restart --remote heroku-v2
 ```
 
 ### Git Workflow (optional)
@@ -113,4 +113,4 @@ git diff
 1. Go to project in terminal on file system:
 `cd ~/Desktop/decision-task-node`
 2. Pull down changes from remote `git fetch`
-3. Merge remote branch with local branch `git merge origin/master` 
+3. Merge remote branch with local branch `git merge origin/master`
