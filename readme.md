@@ -44,7 +44,7 @@ Version 1
 `git checkout master`
 
 Version 2:
-`git checkout start-v2-updates`
+`git checkout version-2`
 
 Local Run with Heroku
 `heroku local web`
