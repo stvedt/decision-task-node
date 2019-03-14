@@ -1,4 +1,6 @@
 (function(){
+  let pages, sessionId;
+
   function getPageJSONData(){
     fetch("/js/pages.json", {
       method: "GET"
@@ -8,29 +10,26 @@
     }).then(function(data) {
       pages = data;
        console.log(data);
-       setupLocalStorage();
+       initialize();
     })
     .catch(err => {
-        //do something smarter here
-
-        throw err;
+      throw err;
     });
   }
-  getPageJSONData();
 
   // Randomizing order of pages
   function shuffleArray(array) {
-      for (var i = array.length - 1; i > 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1));
-          var temp = array[i];
-          array[i] = array[j];
-          array[j] = temp;
-      }
-      return array;
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+    return array;
   }
 
   function sendOrder(values){
-    //console.log('send order', JSON.stringify(values));
+    console.log('sendOrder', JSON.stringify(values));
     var valuesString = JSON.stringify(values);
     var postURL = '/send-order/?id=' + sessionId + '&order=' + valuesString;
     fetch(postURL, {
@@ -39,50 +38,31 @@
       console.log('successful send order completed');
       //return response.json();
     }).catch(err => {
-        throw err;
+      throw err;
     });
-
   }
 
-  function setupLocalStorage(){
-
-    if ( localStorage.getItem('sessionId') === null ) {
-      console.log('sessionId does not exist yet');
-      createNewSession();
-    } else {
-      console.log('sessionId already exists:', localStorage.getItem('sessionId'));
-      sessionId = localStorage.getItem('sessionId');
-      // check if sessions exists
-      getSession();
-
+  function setupPageOrder(){
+    console.log('setupPageOrder');
+    var arrayOfPageKeys = [];
+    for (key in pages){
+      arrayOfPageKeys.push(key);
     }
 
-    if ( localStorage.getItem('pageOrder') === null ) {
-      console.log('pageOrder not set');
-      var arrayOfPageKeys = [];
-      for (key in pages){
-        arrayOfPageKeys.push(key);
+    var newArrayOfPageKeys = shuffleArray(arrayOfPageKeys);
+    var pageOrder = [];
+    var numbersOnly = [];
+    for(var i = 0; i <=7; i++){
+      var urlString = "choice-problem-" + (i+1);
+      pageOrder[i] = {
+        url: urlString,
+        problem: newArrayOfPageKeys[i]
       }
-
-      var newArrayOfPageKeys = shuffleArray(arrayOfPageKeys);
-      var pageOrder = [];
-      var numbersOnly = [];
-      for(var i = 0; i <=7; i++){
-        var urlString = "choice-problem-" + (i+1);
-        pageOrder[i] = {
-          url: urlString,
-          problem: newArrayOfPageKeys[i]
-        }
-        numbersOnly[i] = newArrayOfPageKeys[i][newArrayOfPageKeys[i].length -1];
-      }
-      console.log("New page order created: ",pageOrder);
-      console.log('numbersOnly:', numbersOnly);
-      sendOrder(numbersOnly);
-      localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
-    } else {
-      console.log('pageOrder is already set');
-      pageOrder = JSON.parse(localStorage.getItem('pageOrder'));
+      numbersOnly[i] = newArrayOfPageKeys[i][newArrayOfPageKeys[i].length -1];
     }
+    console.log('New page order created, numbersOnly:', numbersOnly);
+    sendOrder(numbersOnly);
+    localStorage.setItem('pageOrder', JSON.stringify(pageOrder));
     var $nextProblem = document.getElementById('next-problem');
     // $nextProblem.href = "choice-problem-1";
   }
@@ -91,11 +71,13 @@
       fetch("/create-session/", {
         method: "GET"
       }).then(function(response){
-
         return response.json();
       }).then(function(data) {
-        localStorage.setItem('sessionId',data._id);
-        console.log('New session create id: ', data._id)
+        const newSessionId = data._id;
+        localStorage.setItem('sessionId', newSessionId);
+        sessionId = newSessionId;
+        console.log('New session create id: ', newSessionId);
+        setupPageOrder();
 
         // Some clean up with new logic check. Reload Google Form with new session ID
         var googleFormSrc =
@@ -105,13 +87,11 @@
         document.getElementById('google-form').src = googleFormSrc;
       })
       .catch(err => {
-        //do something smarter here
-
         throw err;
       });
   }
 
-  function getSession(){
+  function checkSessionExists(){
     console.log('get session:', sessionId);
     var getURL = '/get-session/?id=' + sessionId;
     fetch(getURL, {
@@ -127,4 +107,18 @@
       throw err;
     });
   }
+
+  function initialize(){
+    if ( localStorage.getItem('sessionId') === null ) {
+      console.log('sessionId does not exist yet');
+      createNewSession();
+    } else {
+      console.log('sessionId already exists:', localStorage.getItem('sessionId'));
+      sessionId = localStorage.getItem('sessionId');
+      checkSessionExists();
+    }
+  }
+  // Execute code
+  getPageJSONData();
+
 })();
