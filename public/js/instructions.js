@@ -81,7 +81,7 @@
 
         // Some clean up with new logic check. Reload Google Form with new session ID
         var googleFormSrc =
-          "https://docs.google.com/forms/d/e/1FAIpQLSeCtuwfD04lKMH6IJlYEbXMLPa6r9vVUCkGS6zQ3EuCEyFAHw/viewform?usp=pp_url&entry.1588747463=" + 
+          "https://docs.google.com/forms/d/e/1FAIpQLSeCtuwfD04lKMH6IJlYEbXMLPa6r9vVUCkGS6zQ3EuCEyFAHw/viewform?usp=pp_url&entry.1588747463=" +
             localStorage.getItem('sessionId') +
             "&embedded=true";
         document.getElementById('google-form').src = googleFormSrc;
@@ -101,6 +101,7 @@
       if(response.status === 401){
         createNewSession();
       } else {
+        setupPageOrder();
         return response.json();
       }
     }).catch(err => {
