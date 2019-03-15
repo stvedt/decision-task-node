@@ -101,6 +101,7 @@
       if(response.status === 401){
         createNewSession();
       } else {
+        setupPageOrder();
         return response.json();
       }
     }).catch(err => {
